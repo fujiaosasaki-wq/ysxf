@@ -87,8 +87,12 @@
             width: 56px; height: 56px; border-radius: 50%;
             background: #3b82f6; color: white; border: none;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; display: none; align-items: center; justify-content: center;
             transition: transform 0.2s; z-index: 100;
+        }
+        
+        .settings-fab.show {
+          display: flex;
         }
         .settings-fab:hover { transform: scale(1.05); }
 
@@ -627,7 +631,7 @@
 
         function enterAdminMode() {
             isAdminMode = true;
-            dom.adminFab.classList.add('show');
+            dom.adminFab.classList.add('show');dom.openBtn.classList.add('show');
             dom.modalTitle.textContent = '管理模式 - 自定义设置';
             showToast('已进入管理模式', 'info');
         }
