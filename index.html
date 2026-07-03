@@ -123,6 +123,155 @@
         .setting-group textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
         .setting-group textarea { resize: vertical; min-height: 60px; }
         .setting-tip { font-size: 12px; color: #9ca3af; margin-top: 4px; display: block; }
+        /* 锁定按钮样式 */
+.setting-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lock-btn {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lock-btn:hover {
+    background: #e5e7eb;
+}
+
+.lock-btn.locked {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+/* 兴趣条目列表 */
+.interests-input-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.interest-input-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    position: relative;
+}
+
+.interest-input-item.locked {
+    opacity: 0.6;
+    pointer-events: none;
+    background: #f3f4f6;
+}
+
+.interest-input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.interest-input-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.btn-delete-item {
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-delete-item:hover {
+    background: #fecaca;
+}
+
+.interest-input-row {
+    margin-bottom: 8px;
+}
+
+.interest-input-row label {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.interest-input-row input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.interest-input-row input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.upload-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.btn-upload-small {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px dashed #93c5fd;
+    background: #eff6ff;
+    color: #3b82f6;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-upload-small:hover {
+    background: #dbeafe;
+}
+
+.btn-add {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    border: 2px dashed #d1d5db;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+
+.btn-add:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: #eff6ff;
+}
+
+.image-preview-small {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+    margin-top: 6px;
+}
 
         .avatar-upload-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
         .btn-upload, .btn-clear-avatar {
@@ -280,19 +429,38 @@
                 <textarea id="inputLinks" rows="3" placeholder="例如：GitHub|https://github.com/你的名字"></textarea>
             </div>
 
-            <div class="setting-group">
-                <label>喜欢的音乐（每行一个：标题|图片链接|跳转链接）</label>
-                <textarea id="inputMusic" rows="3" placeholder="例如：我的最爱|https://.../cover.jpg|https://music.163.com/"></textarea>
-                <span class="setting-tip">每行代表一个项目，用竖线 "|" 分隔</span>
-            </div>
-            <div class="setting-group">
-                <label>喜欢的动漫（每行一个：标题|图片链接|跳转链接）</label>
-                <textarea id="inputAnime" rows="3" placeholder="例如：海贼王|https://.../cover.jpg|https://www.bilibili.com/"></textarea>
-            </div>
-            <div class="setting-group">
-                <label>喜欢的游戏（每行一个：标题|图片链接|跳转链接）</label>
-                <textarea id="inputGame" rows="3" placeholder="例如：黑神话悟空|https://.../cover.jpg|https://www.heishenhua.com/"></textarea>
-            </div>
+            <!-- 喜欢的音乐 -->
+<div class="setting-group">
+    <label>
+        喜欢的音乐
+        <button type="button" class="lock-btn" id="lockMusic" onclick="toggleLock('music')">🔒 锁定</button>
+    </label>
+    <div id="musicList" class="interests-input-list">
+        <!-- 动态生成的条目会放在这里 -->
+    </div>
+    <button type="button" class="btn-add" onclick="addInterestItem('music')">+ 添加音乐</button>
+    <span class="setting-tip">每个音乐卡片包含：标题、封面图片、跳转链接</span>
+</div>
+
+<!-- 喜欢的动漫 -->
+<div class="setting-group">
+    <label>
+        喜欢的动漫
+        <button type="button" class="lock-btn" id="lockAnime" onclick="toggleLock('anime')">🔒 锁定</button>
+    </label>
+    <div id="animeList" class="interests-input-list"></div>
+    <button type="button" class="btn-add" onclick="addInterestItem('anime')">+ 添加动漫</button>
+</div>
+
+<!-- 喜欢的游戏 -->
+<div class="setting-group">
+    <label>
+        喜欢的游戏
+        <button type="button" class="lock-btn" id="lockGame" onclick="toggleLock('game')">🔒 锁定</button>
+    </label>
+    <div id="gameList" class="interests-input-list"></div>
+    <button type="button" class="btn-add" onclick="addInterestItem('game')">+ 添加游戏</button>
+</div>
 
             <div class="setting-group">
                 <label>底部版权邮箱</label>
@@ -736,9 +904,7 @@
             dom.inputTitle.value  = config.title  || '';
             dom.inputBio.value    = config.bio    || '';
             dom.inputLinks.value  = linksToLines(config.links);
-            dom.inputMusic.value  = interestsToLines((config.interests || {}).music);
-            dom.inputAnime.value  = interestsToLines((config.interests || {}).anime);
-            dom.inputGame.value   = interestsToLines((config.interests || {}).game);
+            fillInterestInputs(config);
             dom.inputFooter.value = config.footer || '';
         }
 
@@ -820,11 +986,7 @@
                 title:  dom.inputTitle.value.trim()  || defaultConfig.title,
                 bio:    dom.inputBio.value.trim()    || defaultConfig.bio,
                 links:  parseLinks(dom.inputLinks.value),
-                interests: {
-                    music: parseInterests(dom.inputMusic.value),
-                    anime: parseInterests(dom.inputAnime.value),
-                    game:  parseInterests(dom.inputGame.value)
-                },
+                interests: collectInterestData(),
                 footer: dom.inputFooter.value.trim() || defaultConfig.footer
             };
 
@@ -878,6 +1040,199 @@
         } else {
             renderConfig(loadLocalConfig());
         }
+        // ========== 兴趣条目管理 (新增) ==========
+
+    // 获取分类中文名
+    function getCategoryName(cat) {
+        const names = { music: '音乐', anime: '动漫', game: '游戏' };
+        return names[cat] || cat;
+    }
+
+    // 切换锁定状态 (必须加 window.)
+    window.toggleLock = function(category) {
+        const btn = $(`lock${category.charAt(0).toUpperCase() + category.slice(1)}`);
+        const list = $(`${category}List`);
+        const items = list.querySelectorAll('.interest-input-item');
+        
+        if (btn.classList.contains('locked')) {
+            btn.classList.remove('locked');
+            btn.textContent = '🔒 锁定';
+            items.forEach(item => item.classList.remove('locked'));
+            showToast(`已解锁${getCategoryName(category)}编辑`, 'info');
+        } else {
+            btn.classList.add('locked');
+            btn.textContent = '🔓 解锁';
+            items.forEach(item => item.classList.add('locked'));
+            showToast(`已锁定${getCategoryName(category)}，防止误操作`, 'info');
+        }
+    };
+
+    // 添加新条目 (必须加 window.)
+    window.addInterestItem = function(category) {
+        const list = $(`${category}List`);
+        const item = document.createElement('div');
+        item.className = 'interest-input-item';
+        item.dataset.index = list.children.length;
+        
+        item.innerHTML = `
+            <div class="interest-input-header">
+                <span class="interest-input-title">${getCategoryName(category)} #${list.children.length + 1}</span>
+                <button type="button" class="btn-delete-item" onclick="deleteInterestItem(this, '${category}')">删除</button>
+            </div>
+            <div class="interest-input-row">
+                <label>标题</label>
+                <input type="text" class="input-title" placeholder="例如：我的最爱" maxlength="30">
+            </div>
+            <div class="interest-input-row">
+                <label>封面图片</label>
+                <input type="url" class="input-image" placeholder="或输入图片网址 https://...">
+                <div class="upload-row">
+                    <button type="button" class="btn-upload-small" onclick="uploadItemImage(this, '${category}')"> 上传本地图片</button>
+                    <button type="button" class="btn-upload-small" onclick="clearItemImage(this)">✕ 清除</button>
+                </div>
+                <img class="image-preview-small" style="display:none;">
+            </div>
+            <div class="interest-input-row">
+                <label>跳转链接</label>
+                <input type="url" class="input-url" placeholder="例如：https://music.163.com/...">
+            </div>
+        `;
+        
+        list.appendChild(item);
+        showToast(`已添加${getCategoryName(category)}条目`, 'success');
+    };
+
+    // 删除条目 (必须加 window.)
+    window.deleteInterestItem = function(btn, category) {
+        if (!confirm('确定要删除这个条目吗？')) return;
+        btn.closest('.interest-input-item').remove();
+        renumberItems(category);
+    };
+
+    // 重新编号
+    function renumberItems(category) {
+        const list = $(`${category}List`);
+        list.querySelectorAll('.interest-input-item').forEach((item, index) => {
+            item.querySelector('.interest-input-title').textContent = `${getCategoryName(category)} #${index + 1}`;
+            item.dataset.index = index;
+        });
+    }
+
+    // 上传图片 (必须加 window.)
+    window.uploadItemImage = function(btn, category) {
+        const input = btn.closest('.interest-input-row').querySelector('.input-image');
+        const preview = btn.closest('.interest-input-row').querySelector('.image-preview-small');
+        
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('请选择图片文件', 'error');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('图片过大（<5MB）', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                input.value = ev.target.result;
+                preview.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        };
+        fileInput.click();
+    };
+
+    // 清除图片 (必须加 window.)
+    window.clearItemImage = function(btn) {
+        const input = btn.closest('.interest-input-row').querySelector('.input-image');
+        const preview = btn.closest('.interest-input-row').querySelector('.image-preview-small');
+        input.value = '';
+        preview.src = '';
+        preview.style.display = 'none';
+    };
+
+    // 填充表单时渲染兴趣条目
+    function fillInterestInputs(config) {
+        const interests = config.interests || {};
+        
+        ['music', 'anime', 'game'].forEach(category => {
+            const list = $(`${category}List`);
+            list.innerHTML = '';
+            
+            const items = interests[category] || [];
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'interest-input-item';
+                div.dataset.index = index;
+                
+                const isImageBase64 = item.image && item.image.startsWith('data:image/');
+                
+                div.innerHTML = `
+                    <div class="interest-input-header">
+                        <span class="interest-input-title">${getCategoryName(category)} #${index + 1}</span>
+                        <button type="button" class="btn-delete-item" onclick="deleteInterestItem(this, '${category}')">删除</button>
+                    </div>
+                    <div class="interest-input-row">
+                        <label>标题</label>
+                        <input type="text" class="input-title" value="${escapeHtml(item.title || '')}" maxlength="30">
+                    </div>
+                    <div class="interest-input-row">
+                        <label>封面图片</label>
+                        <input type="url" class="input-image" value="${isImageBase64 ? '' : escapeHtml(item.image || '')}" placeholder="或输入图片网址 https://...">
+                        <div class="upload-row">
+                            <button type="button" class="btn-upload-small" onclick="uploadItemImage(this, '${category}')">📁 上传本地图片</button>
+                            <button type="button" class="btn-upload-small" onclick="clearItemImage(this)">✕ 清除</button>
+                        </div>
+                        <img class="image-preview-small" src="${escapeHtml(item.image || '')}" style="display: ${item.image ? 'block' : 'none'};">
+                    </div>
+                    <div class="interest-input-row">
+                        <label>跳转链接</label>
+                        <input type="url" class="input-url" value="${escapeHtml(item.url || '')}" placeholder="例如：https://...">
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+            
+            if (items.length === 0) {
+                addInterestItem(category);
+            }
+        });
+    }
+
+    // 保存时收集兴趣条目数据
+    function collectInterestData() {
+        const interests = {};
+        
+        ['music', 'anime', 'game'].forEach(category => {
+            const list = $(`${category}List`);
+            const items = [];
+            
+            list.querySelectorAll('.interest-input-item').forEach(item => {
+                const title = item.querySelector('.input-title').value.trim();
+                const image = item.querySelector('.input-image').value.trim();
+                const url = item.querySelector('.input-url').value.trim();
+                
+                if (title || image || url) {
+                    items.push({
+                        title: title || `${getCategoryName(category)} ${items.length + 1}`,
+                        image: image || FALLBACK_IMG,
+                        url: url || '#'
+                    });
+                }
+            });
+            
+            interests[category] = items;
+        });
+        
+        return interests;
+    }
     });
     </script>
 </body>
