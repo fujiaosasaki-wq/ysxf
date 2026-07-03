@@ -520,7 +520,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$' + CONFIG.API_KEY
+                        'X-Master-Key':  CONFIG.API_KEY
                     },
                     body: JSON.stringify(config)
                 });
@@ -532,7 +532,7 @@
             async readBin() {
                 if (!CONFIG.BIN_ID) return null;
                 const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': '$2a$10$' + CONFIG.API_KEY }
+                    headers: { 'X-Master-Key':  CONFIG.API_KEY }
                 });
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.message || '读取失败');
@@ -545,7 +545,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$' + CONFIG.API_KEY
+                        'X-Master-Key':  CONFIG.API_KEY
                     },
                     body: JSON.stringify(config)
                 });
