@@ -638,6 +638,7 @@
 
         dom.adminFab.addEventListener('click', () => {
             fillForm(loadLocalConfig());
+            dom.inputAvatar.value = dom.displayAvatar.src || '';
             dom.modal.classList.add('active');
         });
 
@@ -700,6 +701,7 @@
                 if (cloudConfig) {
                     const config = Object.assign({}, defaultConfig, cloudConfig);
                     renderConfig(config);
+                    dom.inputAvatar.value = config.avatar || '';
                     saveLocalConfig(config); // 缓存到本地
                     showCloudStatus('✓ 云端同步成功', 'success');
                 }
