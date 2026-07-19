@@ -150,6 +150,19 @@
     color: #92400e;
 }
 
+/* 头像锁定状态 */
+#avatarGroup.avatar-locked input,
+#avatarGroup.avatar-locked .btn-upload,
+#avatarGroup.avatar-locked .btn-clear-avatar {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+#avatarGroup.avatar-locked .btn-upload,
+#avatarGroup.avatar-locked .btn-clear-avatar {
+    filter: grayscale(0.3);
+}
+
 /* 兴趣条目列表 */
 .interests-input-list {
     margin-top: 10px;
@@ -402,14 +415,17 @@
         <div class="modal-content">
             <h2 id="modalTitle">自定义设置</h2>
 
-            <div class="setting-group">
-                <label>头像</label>
+            <div class="setting-group" id="avatarGroup">
+                <label>
+                    头像
+                    <button type="button" class="lock-btn" id="lockAvatar" onclick="toggleAvatarLock()">🔒 锁定</button>
+                </label>
                 <input type="url" id="inputAvatar" placeholder="或输入图片网址 https://...">
                 <div class="avatar-upload-row">
                     <button type="button" class="btn-upload" id="btnUploadAvatar">📁 上传本地图片</button>
                     <button type="button" class="btn-clear-avatar" id="btnClearAvatar">✕ 清除头像</button>
                 </div>
-                <span class="setting-tip">支持上传本地图片或输入网络链接，上传后可裁剪</span>
+                <span class="setting-tip">支持上传本地图片或输入网络链接，上传后可裁剪。锁定后防止误修改。</span>
             </div>
 
             <div class="setting-group">
@@ -1099,8 +1115,21 @@
 
         // ============ 保存 / 重置 ============
         async function handleSave() {
+            const currentConfig = loadLocalConfig();
+            const avatarGroup = document.getElementById('avatarGroup');
+            const avatarLocked = avatarGroup && avatarGroup.classList.contains('avatar-locked');
+            
+            let avatarVal;
+            if (avatarLocked) {
+                // 锁定状态：保留当前已保存的头像，不被空输入覆盖
+                avatarVal = currentConfig.avatar || defaultConfig.avatar;
+            } else {
+                // 未锁定：使用输入框的值
+                avatarVal = dom.inputAvatar.value.trim() || currentConfig.avatar || defaultConfig.avatar;
+            }
+
             const config = {
-                avatar: dom.inputAvatar.value.trim() || defaultConfig.avatar,
+                avatar: avatarVal,
                 name:   dom.inputName.value.trim()   || defaultConfig.name,
                 title:  dom.inputTitle.value.trim()  || defaultConfig.title,
                 bio:    dom.inputBio.value.trim()    || defaultConfig.bio,
@@ -1167,6 +1196,24 @@
         const names = { music: '音乐', anime: '动漫', game: '游戏' };
         return names[cat] || cat;
     }
+
+    // 头像锁定切换 (必须加 window.)
+    window.toggleAvatarLock = function() {
+        const btn = document.getElementById('lockAvatar');
+        const group = document.getElementById('avatarGroup');
+        
+        if (btn.classList.contains('locked')) {
+            btn.classList.remove('locked');
+            btn.textContent = '🔒 锁定';
+            group.classList.remove('avatar-locked');
+            showToast('已解锁头像编辑', 'info');
+        } else {
+            btn.classList.add('locked');
+            btn.textContent = '🔓 解锁';
+            group.classList.add('avatar-locked');
+            showToast('已锁定头像，防止误修改', 'info');
+        }
+    };
 
     // 切换锁定状态 (必须加 window.)
     window.toggleLock = function(category) {
