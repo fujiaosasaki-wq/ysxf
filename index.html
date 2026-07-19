@@ -532,7 +532,27 @@
 
     <input type="file" id="fileInput" accept="image/*" style="display:none">
 
-    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"
+            onerror="window.__CROPPER_LOAD_FAILED__ = true;"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        'use strict';
+
+        // 检测 Cropper.js 是否加载成功
+        if (window.__CROPPER_LOAD_FAILED__ || typeof Cropper === 'undefined') {
+            // 在头像上传按钮上提示降级
+            setTimeout(() => {
+                const btn = document.getElementById('btnUploadAvatar');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.title = '裁剪库加载失败，请检查网络后刷新';
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                }
+            }, 0);
+        }
+    });
+    </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         'use strict';
@@ -541,8 +561,21 @@
         const CONFIG = {
             API_KEY: '$2a$10$eUovO41GxmS.y7btlf4l4.8SyTWTKKgW9ivfySb4AyzQYrpXeeiDG',  // ← 替换成你的 JSONBin API Key
             BIN_ID: '6a47acdfda38895dfe287b30',  // 首次初始化后会自动填入
-            ADMIN_PASSWORD: 'admin123'  // ← 改成你想要的管理密码
+            // 管理员密码哈希（SHA-256 + 盐），原密码不出现在源码中
+            ADMIN_PASSWORD_HASH: '802a527610abc6538f16fb15b50ab8bc8f8c15dc8af45121b3077d4bda9bf9b4',
+            ADMIN_PASSWORD_SALT: '76816a36ccd845cc8c8d2f1a7988b5a0'
         };
+
+        // SHA-256 + 盐 工具函数（使用浏览器原生 SubtleCrypto API）
+        async function sha256(text) {
+            const buf = await crypto.subtle.digest(
+                'SHA-256',
+                new TextEncoder().encode(text)
+            );
+            return Array.from(new Uint8Array(buf))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
 
         // ============ 常量 ============
         const STORAGE_KEY = 'myPageConfig';
@@ -585,9 +618,6 @@
             inputTitle:  $('inputTitle'),
             inputBio:    $('inputBio'),
             inputLinks:  $('inputLinks'),
-            inputMusic:  $('inputMusic'),
-            inputAnime:  $('inputAnime'),
-            inputGame:   $('inputGame'),
             inputFooter: $('inputFooter'),
 
             btnUploadAvatar: $('btnUploadAvatar'),
@@ -638,16 +668,6 @@
             } catch (_) { return '#'; }
         }
 
-        function parseInterests(text) {
-            if (!text || !text.trim()) return [];
-            return text.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
-                const p = line.split('|').map(s => (s || '').trim());
-                return { title: p[0] || '未命名', image: p[1] || FALLBACK_IMG, url: p[2] || '#' };
-            });
-        }
-        function interestsToLines(arr) {
-            return (arr || []).map(i => `${i.title}|${i.image}|${i.url}`).join('\n');
-        }
         function parseLinks(text) {
             if (!text || !text.trim()) return [];
             return text.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
@@ -789,30 +809,38 @@
 
         // ============ 管理员模式 ============
         let isAdminMode = false;
+        let pendingAdminLogin = false;  // 标记是否正在等待管理员登录
 
         function checkAdminMode() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('admin')) {
+                pendingAdminLogin = true;
                 dom.adminLoginModal.classList.add('active');
             }
         }
 
         function enterAdminMode() {
             isAdminMode = true;
-            dom.adminFab.classList.add('show');dom.openBtn.classList.add('show');
+            pendingAdminLogin = false;
+            dom.adminFab.classList.add('show');
             dom.modalTitle.textContent = '管理模式 - 自定义设置';
             showToast('已进入管理模式', 'info');
         }
 
         dom.adminFab.addEventListener('click', () => {
             fillForm(loadLocalConfig());
-            dom.inputAvatar.value = dom.displayAvatar.src || '';
             dom.modal.classList.add('active');
         });
 
-        dom.confirmAdminLoginBtn.addEventListener('click', () => {
+        // 执行管理员登录验证
+        async function doAdminLogin() {
             const pwd = dom.adminPasswordInput.value;
-            if (pwd === CONFIG.ADMIN_PASSWORD) {
+            if (!pwd) {
+                showToast('请输入密码', 'error');
+                return;
+            }
+            const hash = await sha256(pwd + CONFIG.ADMIN_PASSWORD_SALT);
+            if (hash === CONFIG.ADMIN_PASSWORD_HASH) {
                 dom.adminLoginModal.classList.remove('active');
                 dom.adminPasswordInput.value = '';
                 enterAdminMode();
@@ -827,18 +855,25 @@
             } else {
                 showToast('密码错误', 'error');
             }
+        }
+
+        dom.confirmAdminLoginBtn.addEventListener('click', doAdminLogin);
+        // 支持回车提交
+        dom.adminPasswordInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') doAdminLogin();
         });
 
         dom.cancelAdminLoginBtn.addEventListener('click', () => {
             dom.adminLoginModal.classList.remove('active');
             dom.adminPasswordInput.value = '';
+            pendingAdminLogin = false;
             // 清除 URL 参数
             history.replaceState(null, '', window.location.pathname);
         });
 
         // ============ 云端初始化 ============
         dom.confirmInitBtn.addEventListener('click', async () => {
-            if (CONFIG.API_KEY === '你的_API_KEY_粘贴在这里') {
+            if (!CONFIG.API_KEY) {
                 showToast('请先在代码中填写 API_KEY', 'error', 3000);
                 return;
             }
@@ -940,6 +975,10 @@
         });
 
         function openCropModal(imageDataUrl) {
+            if (typeof Cropper === 'undefined') {
+                showToast('裁剪库未加载，请检查网络后刷新页面', 'error', 3000);
+                return;
+            }
             dom.cropImage.src = imageDataUrl;
             dom.cropModal.classList.add('active');
             dom.cropImage.onload = () => {
@@ -966,6 +1005,10 @@
             const canvas = cropperInstance.getCroppedCanvas({
                 width: AVATAR_SIZE, height: AVATAR_SIZE, imageSmoothingQuality: 'high'
             });
+            if (!canvas) {
+                showToast('裁剪失败，请重试或更换图片', 'error');
+                return;
+            }
             let dataUrl = canvas.toDataURL('image/jpeg', AVATAR_QUALITY);
             const sizeKB = Math.round((dataUrl.length * 3) / 4 / 1024);
             if (sizeKB > 500) dataUrl = canvas.toDataURL('image/jpeg', 0.6);
@@ -1034,10 +1077,11 @@
         // ============ 初始化 ============
         checkAdminMode();
 
+        // 管理员正在登录中：暂不加载云端数据，等登录完成后再加载
         // 普通用户：从云端加载
-        if (!isAdminMode && CONFIG.BIN_ID) {
+        if (!pendingAdminLogin && !isAdminMode && CONFIG.BIN_ID) {
             loadFromCloud();
-        } else {
+        } else if (!pendingAdminLogin) {
             renderConfig(loadLocalConfig());
         }
         // ========== 兴趣条目管理 (新增) ==========
@@ -1068,7 +1112,8 @@
     };
 
     // 添加新条目 (必须加 window.)
-    window.addInterestItem = function(category) {
+    // silent 参数：静默添加，不弹 toast（用于初始化空列表时避免 toast 轰炸）
+    window.addInterestItem = function(category, silent) {
         const list = $(`${category}List`);
         const item = document.createElement('div');
         item.className = 'interest-input-item';
@@ -1099,7 +1144,7 @@
         `;
         
         list.appendChild(item);
-        showToast(`已添加${getCategoryName(category)}条目`, 'success');
+        if (!silent) showToast(`已添加${getCategoryName(category)}条目`, 'success');
     };
 
     // 删除条目 (必须加 window.)
@@ -1201,7 +1246,7 @@
             });
             
             if (items.length === 0) {
-                addInterestItem(category);
+                addInterestItem(category, true);  // 静默添加，不弹 toast
             }
         });
     }
