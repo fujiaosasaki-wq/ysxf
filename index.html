@@ -27,6 +27,7 @@
             line-height: 1.6;
             transition: background 0.4s ease, color 0.4s ease;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         :root {
@@ -884,7 +885,58 @@
         }
         .interest-input-item.locked {
             opacity: 0.6;
+        }
+        .interest-input-item.locked .setting-interest-img,
+        .interest-input-item.locked .interest-item-content input {
             pointer-events: none;
+        }
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .item-lock-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .item-lock-btn:hover {
+            color: #f59e0b;
+            border-color: #f59e0b;
+        }
+        .interest-input-item.locked .item-lock-btn {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        .item-delete-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            position: static;
+        }
+        .item-delete-btn:hover {
+            color: #ef4444;
+            border-color: #ef4444;
         }
         .setting-interest-img {
             width: 50px; height: 50px;
@@ -912,17 +964,6 @@
             outline: none;
             border-color: var(--accent);
         }
-        .item-delete-btn {
-            position: absolute;
-            top: 8px; right: 8px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-        .item-delete-btn:hover { color: #ef4444; }
         .item-img-actions {
             display: flex;
             flex-direction: column;
@@ -1867,27 +1908,18 @@
             <!-- 兴趣展示 -->
             <div class="tab-panel" id="tab-interests">
                 <div class="setting-group">
-                    <label>
-                        喜欢的音乐
-                        <button type="button" class="lock-btn" id="lockMusic" onclick="toggleLock('music')">🔒 锁定</button>
-                    </label>
+                    <label>喜欢的音乐</label>
                     <div id="musicList" class="interests-input-list"></div>
                     <button type="button" class="btn-add" onclick="addInterestItem('music')">+ 添加音乐</button>
-                    <span class="setting-tip">每个音乐卡片包含：标题、封面图片、跳转链接</span>
+                    <span class="setting-tip">每个音乐卡片包含：标题、封面图片、跳转链接。点击锁图标可锁定单项防止误修改。</span>
                 </div>
                 <div class="setting-group">
-                    <label>
-                        喜欢的动漫
-                        <button type="button" class="lock-btn" id="lockAnime" onclick="toggleLock('anime')">🔒 锁定</button>
-                    </label>
+                    <label>喜欢的动漫</label>
                     <div id="animeList" class="interests-input-list"></div>
                     <button type="button" class="btn-add" onclick="addInterestItem('anime')">+ 添加动漫</button>
                 </div>
                 <div class="setting-group">
-                    <label>
-                        喜欢的游戏
-                        <button type="button" class="lock-btn" id="lockGame" onclick="toggleLock('game')">🔒 锁定</button>
-                    </label>
+                    <label>喜欢的游戏</label>
                     <div id="gameList" class="interests-input-list"></div>
                     <button type="button" class="btn-add" onclick="addInterestItem('game')">+ 添加游戏</button>
                 </div>
@@ -2558,14 +2590,14 @@
                 lockAvatarBtn.classList.add('locked');
                 lockAvatarBtn.textContent = '🔓 解锁';
             }
+            // 兴趣条目默认单项锁定
             ['music', 'anime', 'game'].forEach(cat => {
-                const btn = document.getElementById('lock' + cat.charAt(0).toUpperCase() + cat.slice(1));
                 const list = document.getElementById(cat + 'List');
-                if (btn && list) {
-                    btn.classList.add('locked');
-                    btn.textContent = '🔓 解锁';
+                if (list) {
                     list.querySelectorAll('.interest-input-item').forEach(item => {
                         item.classList.add('locked');
+                        const lockIcon = item.querySelector('.item-lock-btn i');
+                        if (lockIcon) lockIcon.className = 'fas fa-lock';
                     });
                 }
             });
@@ -2793,27 +2825,25 @@
             return names[cat] || cat;
         }
 
-        window.toggleLock = function(category) {
-            const btn = $(`lock${category.charAt(0).toUpperCase() + category.slice(1)}`);
-            const list = $(`${category}List`);
-            const items = list.querySelectorAll('.interest-input-item');
-            if (btn.classList.contains('locked')) {
-                btn.classList.remove('locked');
-                btn.textContent = '🔒 锁定';
-                items.forEach(item => item.classList.remove('locked'));
-                showToast(`已解锁${getCategoryName(category)}编辑`, 'info');
+        // ========== 单项锁定 ==========
+        window.toggleItemLock = function(btn) {
+            const item = btn.closest('.interest-input-item');
+            const icon = btn.querySelector('i');
+            if (item.classList.contains('locked')) {
+                item.classList.remove('locked');
+                icon.className = 'fas fa-lock-open';
+                showToast('已解锁此项', 'info');
             } else {
-                btn.classList.add('locked');
-                btn.textContent = '🔓 解锁';
-                items.forEach(item => item.classList.add('locked'));
-                showToast(`已锁定${getCategoryName(category)}，防止误操作`, 'info');
+                item.classList.add('locked');
+                icon.className = 'fas fa-lock';
+                showToast('已锁定此项，防止误操作', 'info');
             }
         };
 
         window.addInterestItem = function(category, silent) {
-            const list = $(`${category}List`);
+            const list = document.getElementById(category + 'List');
             const item = document.createElement('div');
-            item.className = 'interest-input-item';
+            item.className = 'interest-input-item locked';
             item.dataset.index = list.children.length;
             item.innerHTML = `
                 <img class="setting-interest-img item-img" src="${FALLBACK_IMG}" alt="封面"
@@ -2823,12 +2853,17 @@
                     <input type="text" class="item-title-input" placeholder="标题">
                     <input type="url" class="item-url-input" placeholder="跳转链接 https://...">
                 </div>
-                <button type="button" class="item-delete-btn" onclick="deleteInterestItem(this, '${category}')">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="item-actions">
+                    <button type="button" class="item-lock-btn" onclick="toggleItemLock(this)" title="锁定/解锁">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <button type="button" class="item-delete-btn" onclick="deleteInterestItem(this, '${category}')" title="删除">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             `;
             list.appendChild(item);
-            if (!silent) showToast(`已添加${getCategoryName(category)}条目`, 'success');
+            if (!silent) showToast('已添加' + getCategoryName(category) + '条目（默认锁定）', 'success');
         };
 
         window.deleteInterestItem = function(btn, category) {
