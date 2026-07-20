@@ -165,19 +165,6 @@
             border-color: var(--accent);
             transform: rotate(15deg);
         }
-        .nav-search {
-            width: 38px; height: 38px;
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .nav-search:hover { color: var(--accent); border-color: var(--accent); }
 
         /* ===== Hero 大图区 ===== */
         .hero {
@@ -556,23 +543,6 @@
             gap: 8px;
             margin-top: 14px;
             flex-wrap: wrap;
-        }
-        .social-icon {
-            width: 34px; height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            background: var(--bg-body);
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        .social-icon:hover {
-            color: #fff;
-            background: var(--accent);
-            transform: translateY(-2px);
         }
 
         /* 公告 */
@@ -962,16 +932,16 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay.active { display: flex; opacity: 1; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); }
         .modal-content {
             background: var(--bg-card);
             border-radius: var(--radius-xl);
@@ -980,10 +950,11 @@
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.85) translateY(30px);
+            opacity: 0;
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
 
         .modal-content h2 {
             font-size: 20px;
@@ -1453,10 +1424,12 @@
                 margin: 10px;
                 border-radius: 20px 20px 0 0;
                 transform: translateY(100%);
-                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                opacity: 0;
+                transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
             }
             .modal-overlay.active .modal-content {
                 transform: translateY(0);
+                opacity: 1;
             }
             .admin-login-modal { align-items: center; }
             .admin-login-modal .modal-content {
@@ -1607,10 +1580,12 @@
         html.mobile-view .modal-content {
             border-radius: 20px 20px 0 0;
             transform: translateY(100%);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
         html.mobile-view .modal-overlay.active .modal-content {
             transform: translateY(0);
+            opacity: 1;
         }
         html.mobile-view .admin-login-modal {
             align-items: center;
@@ -1975,28 +1950,6 @@
         }
         .tag-item:hover::before {
             opacity: 1;
-        }
-
-        /* ===== 社交图标增强 ===== */
-        .social-icon {
-            position: relative;
-        }
-        .social-icon::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #a78bfa);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-        .social-icon:hover::before {
-            opacity: 1;
-        }
-        .social-icon:hover {
-            color: #fff;
-            transform: translateY(-3px) scale(1.1);
         }
 
         /* ===== 侧边栏卡片悬浮增强 ===== */
@@ -2476,7 +2429,6 @@
             <!-- 动态生成 -->
         </ul>
         <div class="nav-right">
-            <button class="nav-search" aria-label="搜索"><i class="fas fa-search"></i></button>
             <button class="theme-toggle" id="themeToggle" aria-label="切换主题"><i class="fas fa-moon"></i></button>
         </div>
     </nav>
@@ -2544,10 +2496,6 @@
                         <div class="stat-label">说说</div>
                     </div>
                 </div>
-                <div class="profile-social" id="sidebarSocial">
-                    <!-- 动态生成社交链接 -->
-                </div>
-            </div>
 
             <!-- 公告 -->
             <div class="sidebar-card notice-card reveal-right" style="transition-delay: 0.1s;">
@@ -2676,11 +2624,6 @@
                     <textarea id="inputBio" rows="3" placeholder="写一段自我介绍" maxlength="300"></textarea>
                 </div>
                 <div class="setting-group">
-                    <label>社交链接（每行一个：名称|链接|图标名）</label>
-                    <textarea id="inputLinks" rows="3" placeholder="例如：GitHub|https://github.com/xxx|fa-github"></textarea>
-                    <span class="setting-tip">图标名使用 FontAwesome 图标，如 fa-github, fa-weibo, fa-zhihu 等</span>
-                </div>
-                <div class="setting-group">
                     <label>页脚文字</label>
                     <input type="text" id="inputFooter" placeholder="页脚显示的版权文字" maxlength="100">
                 </div>
@@ -2715,9 +2658,10 @@
                     <span class="setting-tip">显示在"最新文章"标题下方的小字</span>
                 </div>
                 <div class="setting-group">
-                    <label>文章列表（每行一个：标题|封面|链接|简介|标签|内容）</label>
-                    <textarea id="inputPosts" rows="6" placeholder="示例：&#10;我的第一篇文章|https://xxx.com/cover.jpg|https://xxx.com/post/1|这是文章简介|技术,生活|文章完整内容..."></textarea>
-                    <span class="setting-tip">标签用英文逗号分隔，最多3个；内容为可选，支持换行</span>
+                    <label>文章列表</label>
+                    <div id="postsList" class="interests-input-list"></div>
+                    <button type="button" class="btn-add" onclick="addPostItem()">+ 添加文章</button>
+                    <span class="setting-tip">每个文章包含：标题、封面图、链接、简介、标签、日期、内容。点击锁图标可锁定单项防止误修改。</span>
                 </div>
             </div>
 
@@ -2882,7 +2826,6 @@
     <!-- 欢迎提示 -->
     <div class="welcome-toast" id="welcomeToast">
         <div class="welcome-toast-content">
-            <i class="fas fa-heart" style="color:#ef4444;"></i>
             <span id="welcomeText">欢迎回家</span>
         </div>
     </div>
@@ -3067,7 +3010,6 @@
             sidebarName: $('sidebarName'),
             sidebarTitle: $('sidebarTitle'),
             sidebarBio: $('sidebarBio'),
-            sidebarSocial: $('sidebarSocial'),
             statPosts: $('statPosts'),
             statMoments: $('statMoments'),
             noticeContent: $('noticeContent'),
@@ -3120,7 +3062,6 @@
             inputName: $('inputName'),
             inputTitle: $('inputTitle'),
             inputBio: $('inputBio'),
-            inputLinks: $('inputLinks'),
             inputFooter: $('inputFooter'),
             inputSiteName: $('inputSiteName'),
             inputHeroTitle: $('inputHeroTitle'),
@@ -3409,6 +3350,26 @@
             return result;
         }
 
+        function collectPostsData() {
+            const list = $('postsList');
+            if (!list) return [];
+            const items = list.querySelectorAll('.interest-input-item');
+            return Array.from(items).map(item => {
+                const tagsInput = item.querySelector('.item-tags-input');
+                const tags = tagsInput ? tagsInput.value.split(',').map(t => t.trim()).filter(Boolean).slice(0, 3) : [];
+                return {
+                    title: item.querySelector('.item-title-input').value.trim(),
+                    cover: item.querySelector('.item-img').dataset.src || '',
+                    url: item.querySelector('.item-url-input').value.trim() || '#',
+                    excerpt: item.querySelector('.item-excerpt-input').value.trim(),
+                    tags: tags,
+                    date: item.querySelector('.item-date-input').value.trim(),
+                    content: item.querySelector('.item-content-input').value.trim(),
+                    sticky: false
+                };
+            }).filter(item => item.title || item.url !== '#');
+        }
+
         // ============ 好友码数据收集 ============
         function collectFriendCodesData() {
             const list = $('friendCodesList');
@@ -3537,13 +3498,6 @@
             dom.sidebarTitle.textContent = cfg.title || '';
             dom.sidebarBio.textContent = cfg.bio || '';
 
-            // 社交链接
-            if (cfg.links && cfg.links.length) {
-                dom.sidebarSocial.innerHTML = cfg.links.map(l =>
-                    `<a href="${escapeHtml(l.url)}" class="social-icon" target="_blank" title="${escapeHtml(l.name)}"><i class="fas ${escapeHtml(l.icon)}"></i></a>`
-                ).join('');
-            }
-
             // 统计
             const postsCount = (cfg.posts || []).length;
             const momentsCount = (cfg.moments || []).length;
@@ -3569,9 +3523,8 @@
                             </div>
                             <div class="post-body">
                                 <div class="post-meta">
-                                    ${p.date ? `<span><i class="far fa-calendar"></i> ${escapeHtml(p.date)}</span>` : ''}
-                                    ${p.tags && p.tags.length ? `<span><i class="far fa-folder"></i> ${escapeHtml(p.tags[0])}</span>` : ''}
-                                </div>
+                                ${p.date ? `<span><i class="far fa-calendar"></i> ${escapeHtml(p.date)}</span>` : ''}
+                            </div>
                                 <h3 class="post-title">${escapeHtml(p.title)}</h3>
                                 <p class="post-excerpt">${escapeHtml(p.excerpt || '')}</p>
                                 ${p.tags && p.tags.length ? `<div class="post-tags">${p.tags.slice(0,3).map(t=>`<span class="post-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
@@ -3673,7 +3626,6 @@
             dom.inputName.value = cfg.name || '';
             dom.inputTitle.value = cfg.title || '';
             dom.inputBio.value = cfg.bio || '';
-            dom.inputLinks.value = linksToText(cfg.links);
             dom.inputFooter.value = cfg.footer || '';
 
             dom.inputSiteName.value = cfg.siteName || '';
@@ -3681,7 +3633,18 @@
             dom.inputHeroSubtitle.value = cfg.heroSubtitle || '';
             dom.inputHeroBg.value = cfg.heroBg || '';
 
-            dom.inputPosts.value = postsToText(cfg.posts);
+            const postsList = $('postsList');
+            if (postsList) {
+                postsList.innerHTML = '';
+                const posts = cfg.posts || [];
+                if (posts.length === 0) {
+                    addPostItem(true);
+                } else {
+                    posts.forEach(post => {
+                        addPostItem(true, post);
+                    });
+                }
+            }
             dom.inputMoments.value = momentsToText(cfg.moments);
 
             if (dom.inputPostsSubtitle) dom.inputPostsSubtitle.value = cfg.postsSubtitle || defaultConfig.postsSubtitle;
@@ -3799,9 +3762,8 @@
                 postsSubtitle: (dom.inputPostsSubtitle && dom.inputPostsSubtitle.value.trim()) || defaultConfig.postsSubtitle,
                 momentsSubtitle: (dom.inputMomentsSubtitle && dom.inputMomentsSubtitle.value.trim()) || defaultConfig.momentsSubtitle,
                 interestsSubtitle: (dom.inputInterestsSubtitle && dom.inputInterestsSubtitle.value.trim()) || defaultConfig.interestsSubtitle,
-                links:  parseLinks(dom.inputLinks.value),
                 nav:    parseNav(dom.inputNav.value),
-                posts:  parsePosts(dom.inputPosts.value),
+                posts:  collectPostsData(),
                 moments: parseMoments(dom.inputMoments.value),
                 notice: dom.inputNotice.value.trim(),
                 tags:   parseTags(dom.inputTags.value),
@@ -3847,9 +3809,11 @@
         function openModal() {
             fillForm(loadLocalConfig());
             dom.modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
         function closeModal() {
             dom.modal.classList.remove('active');
+            document.body.style.overflow = '';
         }
         dom.closeBtn.addEventListener('click', closeModal);
         dom.modal.addEventListener('click', e => { if (e.target === dom.modal) closeModal(); });
@@ -3860,7 +3824,6 @@
             dom.postDetailCover.style.backgroundImage = `url('${escapeHtml(post.cover || FALLBACK_IMG)}')`;
             let metaHtml = '';
             if (post.date) metaHtml += `<span><i class="far fa-calendar"></i> ${escapeHtml(post.date)}</span>`;
-            if (post.tags && post.tags.length) metaHtml += `<span><i class="far fa-folder"></i> ${escapeHtml(post.tags[0])}</span>`;
             dom.postDetailMeta.innerHTML = metaHtml;
             dom.postDetailTitle.textContent = post.title || '';
             const rawContent = post.content || post.excerpt || '';
@@ -3912,9 +3875,11 @@
             if (!src) return;
             dom.imageViewerImg.src = src;
             dom.imageViewerModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
         function closeImageViewer() {
             dom.imageViewerModal.classList.remove('active');
+            document.body.style.overflow = '';
         }
         window.openImageViewer = openImageViewer;
         if (dom.imageViewerClose) dom.imageViewerClose.addEventListener('click', closeImageViewer);
@@ -4023,7 +3988,14 @@
 
         function showWelcomeToast(nickname) {
             if (!dom.welcomeToast || !dom.welcomeText) return;
-            dom.welcomeText.textContent = `欢迎回家，${nickname}`;
+            const hour = new Date().getHours();
+            let greeting = '你好';
+            if (hour >= 5 && hour < 9) greeting = '早上好';
+            else if (hour >= 9 && hour < 12) greeting = '上午好';
+            else if (hour >= 12 && hour < 14) greeting = '中午好';
+            else if (hour >= 14 && hour < 18) greeting = '下午好';
+            else if (hour >= 18 || hour < 5) greeting = '晚上好';
+            dom.welcomeText.textContent = `${greeting}，${nickname}`;
             dom.welcomeToast.classList.add('show');
             setTimeout(() => {
                 dom.welcomeToast.classList.remove('show');
@@ -4057,7 +4029,7 @@
                 lastRenderedJson = '';
                 renderConfig(cfg);
                 showToast('留言发送成功！', 'success');
-                if (isAdminMode && CONFIG.BIN_ID) {
+                if (CONFIG.BIN_ID) {
                     await saveToCloud(cfg);
                 }
             } else {
@@ -4095,6 +4067,7 @@
         function openCropModal(imageDataUrl) {
             dom.cropImage.src = imageDataUrl;
             dom.cropModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
             setTimeout(() => {
                 if (typeof Cropper === 'undefined') {
                     showToast('裁剪库加载失败，直接使用原图', 'warning');
@@ -4115,6 +4088,7 @@
         }
         function closeCropModal() {
             dom.cropModal.classList.remove('active');
+            document.body.style.overflow = '';
             if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
         }
         dom.cancelCropBtn.addEventListener('click', closeCropModal);
@@ -4164,6 +4138,7 @@
             const hash = await sha256(pwd + CONFIG.ADMIN_PASSWORD_SALT);
             if (hash === CONFIG.ADMIN_PASSWORD_HASH) {
                 dom.adminLoginModal.classList.remove('active');
+                document.body.style.overflow = '';
                 dom.adminPasswordInput.value = '';
                 enterAdminMode();
                 if (!CONFIG.BIN_ID) {
@@ -4180,10 +4155,12 @@
         dom.cancelAdminLoginBtn.addEventListener('click', () => {
             pendingAdminLogin = false;
             dom.adminLoginModal.classList.remove('active');
+            document.body.style.overflow = '';
         });
 
         function checkAdminMode() {
             dom.adminLoginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
             pendingAdminLogin = true;
             setTimeout(() => dom.adminPasswordInput.focus(), 300);
         }
@@ -4236,6 +4213,49 @@
                 icon.className = 'fas fa-lock';
                 showToast('已锁定此项，防止误操作', 'info');
             }
+        };
+
+        window.addPostItem = function(silent, data) {
+            const list = $('postsList');
+            if (!list) return;
+            const item = document.createElement('div');
+            item.className = 'interest-input-item locked';
+            item.dataset.index = list.children.length;
+            item.innerHTML = `
+                <div class="setting-interest-img-wrap">
+                    <img class="setting-interest-img item-img" src="${data?.cover || FALLBACK_IMG}" alt="封面"
+                         onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+                </div>
+                <div class="interest-item-content">
+                    <input type="text" class="item-title-input" placeholder="文章标题" value="${data?.title || ''}">
+                    <div class="item-image-url-wrap">
+                        <span class="item-image-url-label">封面图片URL</span>
+                        <input type="url" class="item-image-url-input" placeholder="https://... 粘贴图片链接" value="${data?.cover || ''}" oninput="updateItemImagePreview(this)">
+                    </div>
+                    <input type="url" class="item-url-input" placeholder="文章链接 https://..." value="${data?.url || ''}">
+                    <input type="text" class="item-excerpt-input" placeholder="文章简介" value="${data?.excerpt || ''}">
+                    <input type="text" class="item-tags-input" placeholder="标签（用英文逗号分隔）" value="${(data?.tags || []).join(',')}">
+                    <input type="text" class="item-date-input" placeholder="发布日期" value="${data?.date || ''}">
+                    <textarea class="item-content-input" rows="3" placeholder="文章完整内容"></textarea>
+                </div>
+                <div class="item-actions">
+                    <button type="button" class="item-lock-btn" onclick="toggleItemLock(this)" title="锁定/解锁">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <button type="button" class="item-delete-btn" onclick="deletePostItem(this)" title="删除">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            list.appendChild(item);
+            const contentInput = item.querySelector('.item-content-input');
+            contentInput.value = data?.content || '';
+            if (!silent) showToast('已添加文章条目（默认锁定）', 'success');
+        };
+
+        window.deletePostItem = function(btn) {
+            btn.closest('.interest-input-item').remove();
+            showToast('已删除', 'info');
         };
 
         window.addInterestItem = function(category, silent) {
