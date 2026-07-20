@@ -614,6 +614,207 @@
             transform: scale(1.05);
         }
 
+        /* ===== 好友留言板 ===== */
+        .friend-messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .friend-message-item {
+            background: var(--bg-body);
+            border-radius: var(--radius-md);
+            padding: 10px 12px;
+            transition: all 0.2s ease;
+        }
+        .friend-message-item:hover {
+            background: var(--bg-card-hover);
+        }
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .message-nickname {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .message-colon {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .message-content {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            word-break: break-word;
+        }
+        .message-content.collapsed {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .message-expand-btn {
+            font-size: 12px;
+            color: var(--accent);
+            background: none;
+            border: none;
+            padding: 4px 0 0 0;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .message-expand-btn:hover {
+            text-decoration: underline;
+        }
+        .message-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .message-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .message-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 13px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .message-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .message-send-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .message-send-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* ===== 好友码设置项 ===== */
+        .friend-code-input-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+        .friend-code-item-header {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .friend-code-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .friend-code-input-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .friend-code-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .friend-code-input,
+        .friend-nick-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-size: 13px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+        .friend-code-input:focus,
+        .friend-nick-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* ===== 好友留言管理 ===== */
+        .friend-messages-admin-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .friend-message-admin-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            border: 1px solid var(--border);
+        }
+        .friend-message-admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .friend-message-admin-nick {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .friend-message-admin-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .friend-message-admin-content {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+        .friend-message-delete-btn {
+            padding: 6px 12px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .friend-message-delete-btn:hover {
+            background: #fecaca;
+        }
+        .message-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* 网站资讯 */
         .site-info {
             display: flex;
@@ -1598,6 +1799,79 @@
             text-overflow: ellipsis;
         }
 
+        /* ===== 游戏列表布局 ===== */
+        .game-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .game-list-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .game-list-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+        .game-list-cover {
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: var(--bg-body);
+            position: relative;
+        }
+        .game-list-cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--bg-body);
+            background-image: linear-gradient(45deg, var(--border) 25%, transparent 25%),
+                              linear-gradient(-45deg, var(--border) 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, var(--border) 75%),
+                              linear-gradient(-45deg, transparent 75%, var(--border) 75%);
+            background-size: 12px 12px;
+            background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+            opacity: 0.3;
+        }
+        .game-list-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+            display: block;
+        }
+        .game-list-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .game-list-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .game-list-remark {
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         /* ===== 回到顶部按钮 ===== */
         .back-to-top {
             position: fixed;
@@ -2004,6 +2278,86 @@
             transform: rotate(90deg);
         }
 
+        /* ===== 好友码验证弹窗 ===== */
+        .friend-code-content {
+            max-width: 380px;
+            text-align: center;
+        }
+        .friend-code-title {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .friend-code-tip {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .friend-code-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+        .friend-code-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .friend-code-submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .friend-code-submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* ===== 欢迎提示 ===== */
+        .welcome-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            z-index: 5000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .welcome-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .welcome-toast-content {
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 20px 32px;
+            border-radius: 16px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
         /* 移动端游戏截图响应式 */
         @media (max-width: 600px) {
             .game-screenshots-grid {
@@ -2201,13 +2555,18 @@
                 <div class="notice-content" id="noticeContent">欢迎来到我的小站~</div>
             </div>
 
-            <!-- 标签云 -->
+            <!-- 好友留言板 -->
             <div class="sidebar-card reveal-right" style="transition-delay: 0.2s;">
                 <div class="sidebar-card-title" style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-tags" style="color:var(--accent);"></i> 标签云
+                    <i class="fas fa-comments" style="color:var(--accent);"></i> 好友留言板
                 </div>
-                <div id="tagCloud" class="tag-cloud">
-                    <!-- 动态生成标签 -->
+                <div id="friendMessagesList" class="friend-messages-list">
+                    <!-- 动态生成留言 -->
+                </div>
+                <div class="message-input-wrap" id="messageInputWrap" style="margin-top:12px;">
+                    <div class="message-input-placeholder" id="messageInputPlaceholder" style="padding:10px 14px;border-radius:20px;background:var(--bg-body);color:var(--text-muted);font-size:13px;cursor:pointer;">
+                        <i class="fas fa-lock" style="margin-right:6px;"></i>好友验证后可发言
+                    </div>
                 </div>
             </div>
 
@@ -2286,6 +2645,7 @@
                 <button class="tab-btn" data-tab="tab-moments">说说</button>
                 <button class="tab-btn" data-tab="tab-sidebar">侧边栏</button>
                 <button class="tab-btn" data-tab="tab-interests">兴趣展示</button>
+                <button class="tab-btn" data-tab="tab-friends">好友管理</button>
                 <button class="tab-btn" data-tab="tab-nav">导航菜单</button>
             </div>
 
@@ -2421,6 +2781,21 @@
                 </div>
             </div>
 
+            <!-- 好友管理 -->
+            <div class="tab-panel" id="tab-friends">
+                <div class="setting-group">
+                    <label>好友码管理</label>
+                    <div id="friendCodesList" class="interests-input-list"></div>
+                    <button type="button" class="btn-add" onclick="addFriendCodeItem()">+ 添加好友</button>
+                    <span class="setting-tip">每个好友设置专属好友码和昵称，好友凭码验证后可留言。</span>
+                </div>
+                <div class="setting-group">
+                    <label>好友留言管理</label>
+                    <div id="friendMessagesAdminList" class="friend-messages-admin-list"></div>
+                    <span class="setting-tip">显示所有好友留言，可删除不当留言。</span>
+                </div>
+            </div>
+
             <!-- 导航菜单 -->
             <div class="tab-panel" id="tab-nav">
                 <div class="setting-group">
@@ -2488,6 +2863,27 @@
                 <i class="fas fa-times"></i>
             </button>
             <img class="image-viewer-img" id="imageViewerImg" src="" alt="查看图片">
+        </div>
+    </div>
+
+    <!-- 好友码验证弹窗 -->
+    <div class="modal-overlay friend-code-modal" id="friendCodeModal">
+        <div class="modal-content friend-code-content">
+            <button class="modal-close-btn" id="closeFriendCodeBtn" aria-label="关闭">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="friend-code-title"><i class="fas fa-key" style="color:var(--accent);"></i> 好友验证</h2>
+            <p class="friend-code-tip">请输入你的专属好友码，验证通过后即可留言～</p>
+            <input type="text" id="friendCodeInput" class="friend-code-input" placeholder="输入好友码">
+            <button class="friend-code-submit-btn" id="friendCodeSubmitBtn">验证</button>
+        </div>
+    </div>
+
+    <!-- 欢迎提示 -->
+    <div class="welcome-toast" id="welcomeToast">
+        <div class="welcome-toast-content">
+            <i class="fas fa-heart" style="color:#ef4444;"></i>
+            <span id="welcomeText">欢迎回家</span>
         </div>
     </div>
 
@@ -2640,12 +3036,22 @@
                     { title: '间谍过家家', image: 'https://picsum.photos/seed/a4/200/200', url: '#' }
                 ],
                 game:  [
-                    { title: '原神', image: 'https://picsum.photos/seed/g1/200/200', screenshots: ['https://picsum.photos/seed/g1s1/800/450', 'https://picsum.photos/seed/g1s2/800/450', 'https://picsum.photos/seed/g1s3/800/450', 'https://picsum.photos/seed/g1s4/800/450', 'https://picsum.photos/seed/g1s5/800/450', 'https://picsum.photos/seed/g1s6/800/450'] },
-                    { title: '塞尔达传说', image: 'https://picsum.photos/seed/g2/200/200', screenshots: ['https://picsum.photos/seed/g2s1/800/450', 'https://picsum.photos/seed/g2s2/800/450', 'https://picsum.photos/seed/g2s3/800/450'] },
-                    { title: '动物森友会', image: 'https://picsum.photos/seed/g3/200/200', screenshots: ['https://picsum.photos/seed/g3s1/800/450', 'https://picsum.photos/seed/g3s2/800/450'] },
-                    { title: '星露谷物语', image: 'https://picsum.photos/seed/g4/200/200', screenshots: ['https://picsum.photos/seed/g4s1/800/450'] }
+                    { title: '原神', image: 'https://picsum.photos/seed/g1/200/200', remark: '开放世界冒险游戏 · 500+小时', screenshots: ['https://picsum.photos/seed/g1s1/800/450', 'https://picsum.photos/seed/g1s2/800/450', 'https://picsum.photos/seed/g1s3/800/450', 'https://picsum.photos/seed/g1s4/800/450', 'https://picsum.photos/seed/g1s5/800/450', 'https://picsum.photos/seed/g1s6/800/450'] },
+                    { title: '塞尔达传说', image: 'https://picsum.photos/seed/g2/200/200', remark: '旷野之息 · 全神庙通关', screenshots: ['https://picsum.photos/seed/g2s1/800/450', 'https://picsum.photos/seed/g2s2/800/450', 'https://picsum.photos/seed/g2s3/800/450'] },
+                    { title: '动物森友会', image: 'https://picsum.photos/seed/g3/200/200', remark: '养老游戏 · 小岛建设中', screenshots: ['https://picsum.photos/seed/g3s1/800/450', 'https://picsum.photos/seed/g3s2/800/450'] },
+                    { title: '星露谷物语', image: 'https://picsum.photos/seed/g4/200/200', remark: '像素农场 · 休闲必备', screenshots: ['https://picsum.photos/seed/g4s1/800/450'] }
                 ]
             },
+            friendCodes: [
+                { code: 'friend001', nickname: '小明' },
+                { code: 'friend002', nickname: '小红' },
+                { code: 'friend003', nickname: '阿强' }
+            ],
+            friendMessages: [
+                { nickname: '小明', content: '小站做得真棒！继续加油呀～期待更多内容！', time: '2026-07-18' },
+                { nickname: '小红', content: '哇，你居然也喜欢原神！我也是500+小时玩家，须弥的森林书任务真的太治愈了，特别是最后那段过场动画，我都看哭了QAQ', time: '2026-07-15' },
+                { nickname: '阿强', content: '来串门啦～', time: '2026-07-10' }
+            ],
             footer: '© 2026 云散星繁的小站 | Powered by Love ☕'
         });
 
@@ -2666,6 +3072,9 @@
             statMoments: $('statMoments'),
             noticeContent: $('noticeContent'),
             tagCloud: $('tagCloud'),
+            friendMessagesList: $('friendMessagesList'),
+            messageInputWrap: $('messageInputWrap'),
+            messageInputPlaceholder: $('messageInputPlaceholder'),
             infoPosts: $('infoPosts'),
             infoDays: $('infoDays'),
             infoViews: $('infoViews'),
@@ -2699,6 +3108,13 @@
             imageViewerImg: $('imageViewerImg'),
             imageViewerClose: $('imageViewerClose'),
             imageViewerBackdrop: $('imageViewerBackdrop'),
+
+            friendCodeModal: $('friendCodeModal'),
+            closeFriendCodeBtn: $('closeFriendCodeBtn'),
+            friendCodeInput: $('friendCodeInput'),
+            friendCodeSubmitBtn: $('friendCodeSubmitBtn'),
+            welcomeToast: $('welcomeToast'),
+            welcomeText: $('welcomeText'),
 
             inputAvatar: $('inputAvatar'),
             inputName: $('inputName'),
@@ -2808,11 +3224,34 @@
         }
 
         // ============ 存储 ============
+        function migrateConfig(config) {
+            const merged = Object.assign({}, defaultConfig, config);
+            if (merged.interests && merged.interests.game) {
+                merged.interests.game = merged.interests.game.map(item => {
+                    if (!item.remark) {
+                        item.remark = '';
+                    }
+                    if (!item.image && item.screenshots && item.screenshots.length > 0) {
+                        item.image = item.screenshots[0];
+                    }
+                    return item;
+                });
+            }
+            if (!merged.friendCodes) {
+                merged.friendCodes = defaultConfig.friendCodes || [];
+            }
+            if (!merged.friendMessages) {
+                merged.friendMessages = defaultConfig.friendMessages || [];
+            }
+            return merged;
+        }
+
         function loadLocalConfig() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
-                    return Object.assign({}, defaultConfig, JSON.parse(raw));
+                    const saved = JSON.parse(raw);
+                    return migrateConfig(saved);
                 }
             } catch (e) { console.warn('读取本地配置失败', e); }
             return Object.assign({}, defaultConfig);
@@ -2837,7 +3276,7 @@
                 });
                 if (!resp.ok) throw new Error('HTTP ' + resp.status);
                 const data = await resp.json();
-                const config = Object.assign({}, defaultConfig, data.record);
+                const config = migrateConfig(data.record);
                 saveLocalConfig(config);
                 showCloudStatus('success', '云端同步成功');
                 return config;
@@ -2958,6 +3397,8 @@
                     if (isGame) {
                         const ssInputs = item.querySelectorAll('.screenshot-url-input');
                         obj.screenshots = Array.from(ssInputs).map(input => input.value.trim()).filter(v => v);
+                        const remarkInput = item.querySelector('.item-remark-input');
+                        obj.remark = remarkInput ? remarkInput.value.trim() : '';
                     } else {
                         const urlInput = item.querySelector('.item-url-input');
                         obj.url = urlInput ? urlInput.value.trim() : '';
@@ -2967,6 +3408,94 @@
             });
             return result;
         }
+
+        // ============ 好友码数据收集 ============
+        function collectFriendCodesData() {
+            const list = $('friendCodesList');
+            if (!list) return [];
+            const items = list.querySelectorAll('.friend-code-input-item');
+            return Array.from(items).map(item => {
+                const codeInput = item.querySelector('.friend-code-input');
+                const nickInput = item.querySelector('.friend-nick-input');
+                return {
+                    code: codeInput ? codeInput.value.trim() : '',
+                    nickname: nickInput ? nickInput.value.trim() : ''
+                };
+            }).filter(item => item.code && item.nickname);
+        }
+
+        // ============ 好友码管理 ============
+        window.addFriendCodeItem = function(silent) {
+            const list = $('friendCodesList');
+            if (!list) return;
+            const item = document.createElement('div');
+            item.className = 'friend-code-input-item';
+            item.innerHTML = `
+                <div class="friend-code-item-header">
+                    <div class="friend-code-item-content">
+                        <div class="friend-code-input-wrap">
+                            <span class="friend-code-label">好友码</span>
+                            <input type="text" class="friend-code-input" placeholder="例如：friend001">
+                        </div>
+                        <div class="friend-code-input-wrap">
+                            <span class="friend-code-label">昵称</span>
+                            <input type="text" class="friend-nick-input" placeholder="好友昵称">
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="item-delete-btn" onclick="deleteFriendCodeItem(this)" title="删除">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            list.appendChild(item);
+            if (!silent) showToast('已添加好友条目', 'success');
+        };
+
+        window.deleteFriendCodeItem = function(btn) {
+            const item = btn.closest('.friend-code-input-item');
+            if (item) {
+                item.remove();
+                showToast('已删除', 'success');
+            }
+        };
+
+        // ============ 好友留言管理渲染 ============
+        function renderFriendMessagesAdmin(cfg) {
+            const list = $('friendMessagesAdminList');
+            if (!list) return;
+            const messages = cfg.friendMessages || [];
+            if (messages.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px 0;font-size:13px;">暂无留言</p>';
+                return;
+            }
+            list.innerHTML = messages.map((m, idx) => `
+                <div class="friend-message-admin-item" data-msg-idx="${idx}">
+                    <div class="friend-message-admin-header">
+                        <span class="friend-message-admin-nick">${escapeHtml(m.nickname || '匿名')}</span>
+                        <span class="friend-message-admin-time">${escapeHtml(m.time || '')}</span>
+                    </div>
+                    <div class="friend-message-admin-content">${escapeHtml(m.content || '')}</div>
+                    <button type="button" class="friend-message-delete-btn" onclick="deleteFriendMessageAdmin(${idx})">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.deleteFriendMessageAdmin = function(idx) {
+            if (!confirm('确定要删除这条留言吗？')) return;
+            const cfg = loadLocalConfig();
+            if (cfg.friendMessages && cfg.friendMessages[idx]) {
+                cfg.friendMessages.splice(idx, 1);
+                if (saveLocalConfig(cfg)) {
+                    lastRenderedJson = '';
+                    renderFriendMessagesAdmin(cfg);
+                    showToast('留言已删除', 'success');
+                }
+            }
+        };
 
         // ============ 计算运行天数 ============
         function calcDays(startDateStr) {
@@ -3027,12 +3556,8 @@
             // 公告
             dom.noticeContent.textContent = cfg.notice || '';
 
-            // 标签云
-            if (cfg.tags && cfg.tags.length) {
-                dom.tagCloud.innerHTML = cfg.tags.map(t =>
-                    `<span class="tag-item">${escapeHtml(t)}</span>`
-                ).join('');
-            }
+            // 好友留言板
+            renderFriendMessages(cfg);
 
             // 文章列表
             if (cfg.posts && cfg.posts.length) {
@@ -3093,18 +3618,23 @@
                                 <div class="interest-category-title">
                                     <i class="fas ${cat.icon}"></i> ${cat.name}
                                 </div>
-                                <div class="interest-scroll" data-cat="${cat.key}">
-                                    ${items.map((item, idx) => `
-                                        ${isGame ? `
-                                            <div class="interest-item-card game-item-card" style="cursor:pointer;" data-game-index="${idx}">
-                                                <div class="interest-item-img-wrap">
-                                                    <img class="interest-item-img" src="${escapeHtml(item.image || FALLBACK_IMG)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+                                ${isGame ? `
+                                    <div class="game-list-container" data-cat="${cat.key}">
+                                        ${items.map((item, idx) => `
+                                            <div class="game-list-item game-item-card" style="cursor:pointer;" data-game-index="${idx}">
+                                                <div class="game-list-cover">
+                                                    <img src="${escapeHtml(item.image || FALLBACK_IMG)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
                                                 </div>
-                                                <div class="interest-item-info">
-                                                    <div class="interest-item-name">${escapeHtml(item.title)}</div>
+                                                <div class="game-list-info">
+                                                    <div class="game-list-title">${escapeHtml(item.title)}</div>
+                                                    <div class="game-list-remark">${escapeHtml(item.remark || '')}</div>
                                                 </div>
                                             </div>
-                                        ` : `
+                                        `).join('')}
+                                    </div>
+                                ` : `
+                                    <div class="interest-scroll" data-cat="${cat.key}">
+                                        ${items.map((item, idx) => `
                                             <a href="${escapeHtml(item.url || '#')}" class="interest-item-card" target="_blank">
                                                 <div class="interest-item-img-wrap">
                                                     <img class="interest-item-img" src="${escapeHtml(item.image || FALLBACK_IMG)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
@@ -3113,9 +3643,9 @@
                                                     <div class="interest-item-name">${escapeHtml(item.title)}</div>
                                                 </div>
                                             </a>
-                                        `}
-                                    `).join('')}
-                                </div>
+                                        `).join('')}
+                                    </div>
+                                `}
                             </div>
                         `;
                     }
@@ -3195,9 +3725,33 @@
                                 });
                             }
                         }
+                        const remarkInput = lastItem.querySelector('.item-remark-input');
+                        if (remarkInput) remarkInput.value = item.remark || '';
                     });
                 }
             });
+
+            // 好友码列表
+            const friendCodesList = $('friendCodesList');
+            if (friendCodesList) {
+                friendCodesList.innerHTML = '';
+                const friendCodes = cfg.friendCodes || [];
+                if (friendCodes.length === 0) {
+                    addFriendCodeItem(true);
+                } else {
+                    friendCodes.forEach(fc => {
+                        addFriendCodeItem(true);
+                        const lastItem = friendCodesList.lastElementChild;
+                        const codeInput = lastItem.querySelector('.friend-code-input');
+                        const nickInput = lastItem.querySelector('.friend-nick-input');
+                        if (codeInput) codeInput.value = fc.code || '';
+                        if (nickInput) nickInput.value = fc.nickname || '';
+                    });
+                }
+            }
+
+            // 好友留言管理
+            renderFriendMessagesAdmin(cfg);
 
             // 默认全部锁定
             const avatarGroup = document.getElementById('avatarGroup');
@@ -3254,6 +3808,8 @@
                 startDate: dom.inputStartDate.value.trim(),
                 views:  dom.inputViews.value.trim() || '0',
                 interests: collectInterestData(),
+                friendCodes: collectFriendCodesData(),
+                friendMessages: currentConfig.friendMessages || defaultConfig.friendMessages || [],
                 footer: dom.inputFooter.value.trim() || defaultConfig.footer
             };
 
@@ -3364,6 +3920,160 @@
         if (dom.imageViewerClose) dom.imageViewerClose.addEventListener('click', closeImageViewer);
         if (dom.imageViewerBackdrop) dom.imageViewerBackdrop.addEventListener('click', closeImageViewer);
         if (dom.imageViewerModal) dom.imageViewerModal.addEventListener('click', e => { if (e.target === dom.imageViewerModal) closeImageViewer(); });
+
+        // ============ 好友留言板 ============
+        let currentFriend = null;
+
+        function renderFriendMessages(cfg) {
+            const messages = cfg.friendMessages || [];
+            if (!dom.friendMessagesList) return;
+            if (messages.length === 0) {
+                dom.friendMessagesList.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px 0;font-size:13px;">暂无留言，快来抢沙发～</p>';
+            } else {
+                dom.friendMessagesList.innerHTML = messages.map((m, idx) => {
+                    const isLong = m.content && m.content.length > 60;
+                    return `
+                        <div class="friend-message-item" data-msg-index="${idx}">
+                            <div class="message-header">
+                                <span class="message-nickname">${escapeHtml(m.nickname || '匿名')}</span>
+                                <span class="message-colon">：</span>
+                            </div>
+                            <div class="message-content ${isLong ? 'collapsed' : ''}" data-msg-content="${idx}">
+                                ${escapeHtml(m.content || '').replace(/\n/g, '<br>')}
+                            </div>
+                            ${isLong ? `<button class="message-expand-btn" onclick="toggleMessageExpand(${idx})">展开</button>` : ''}
+                            ${m.time ? `<div class="message-time">${escapeHtml(m.time)}</div>` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+            updateMessageInputUI();
+        }
+
+        window.toggleMessageExpand = function(idx) {
+            const content = document.querySelector(`[data-msg-content="${idx}"]`);
+            const btn = content.nextElementSibling;
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                btn.textContent = '收起';
+            } else {
+                content.classList.add('collapsed');
+                btn.textContent = '展开';
+            }
+        };
+
+        function updateMessageInputUI() {
+            if (!dom.messageInputWrap || !dom.messageInputPlaceholder) return;
+            if (currentFriend) {
+                dom.messageInputWrap.innerHTML = `
+                    <div class="message-input-area">
+                        <textarea id="messageTextarea" class="message-textarea" placeholder="说点什么吧～" maxlength="500"></textarea>
+                        <button id="messageSendBtn" class="message-send-btn">发送</button>
+                    </div>
+                `;
+                const sendBtn = document.getElementById('messageSendBtn');
+                const textarea = document.getElementById('messageTextarea');
+                if (sendBtn) sendBtn.addEventListener('click', handleSendMessage);
+                if (textarea) {
+                    textarea.addEventListener('keydown', e => {
+                        if (e.ctrlKey && e.key === 'Enter') {
+                            handleSendMessage();
+                        }
+                    });
+                }
+            } else {
+                dom.messageInputPlaceholder.innerHTML = '<i class="fas fa-lock" style="margin-right:6px;"></i>好友验证后可发言';
+                dom.messageInputPlaceholder.onclick = openFriendCodeModal;
+                dom.messageInputPlaceholder.style.cursor = 'pointer';
+            }
+        }
+
+        function openFriendCodeModal() {
+            if (!dom.friendCodeModal) return;
+            dom.friendCodeModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => dom.friendCodeInput && dom.friendCodeInput.focus(), 100);
+        }
+        function closeFriendCodeModal() {
+            if (!dom.friendCodeModal) return;
+            dom.friendCodeModal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (dom.friendCodeInput) dom.friendCodeInput.value = '';
+        }
+
+        function verifyFriendCode() {
+            const code = dom.friendCodeInput.value.trim();
+            if (!code) {
+                showToast('请输入好友码', 'warning');
+                return;
+            }
+            const cfg = loadLocalConfig();
+            const friendCodes = cfg.friendCodes || [];
+            const friend = friendCodes.find(f => f.code === code);
+            if (friend) {
+                currentFriend = friend;
+                closeFriendCodeModal();
+                showWelcomeToast(friend.nickname);
+                updateMessageInputUI();
+                showToast('验证成功！', 'success');
+            } else {
+                showToast('好友码不正确哦～', 'error');
+            }
+        }
+
+        function showWelcomeToast(nickname) {
+            if (!dom.welcomeToast || !dom.welcomeText) return;
+            dom.welcomeText.textContent = `欢迎回家，${nickname}`;
+            dom.welcomeToast.classList.add('show');
+            setTimeout(() => {
+                dom.welcomeToast.classList.remove('show');
+            }, 2500);
+        }
+
+        async function handleSendMessage() {
+            const textarea = document.getElementById('messageTextarea');
+            const sendBtn = document.getElementById('messageSendBtn');
+            const content = textarea.value.trim();
+            if (!content) {
+                showToast('请输入留言内容', 'warning');
+                return;
+            }
+            if (!currentFriend) {
+                showToast('请先进行好友验证', 'warning');
+                return;
+            }
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.textContent = '发送中...';
+            }
+            const cfg = loadLocalConfig();
+            const newMsg = {
+                nickname: currentFriend.nickname,
+                content: content,
+                time: new Date().toISOString().slice(0, 10)
+            };
+            cfg.friendMessages = [newMsg, ...(cfg.friendMessages || [])];
+            if (saveLocalConfig(cfg)) {
+                lastRenderedJson = '';
+                renderConfig(cfg);
+                showToast('留言发送成功！', 'success');
+                if (isAdminMode && CONFIG.BIN_ID) {
+                    await saveToCloud(cfg);
+                }
+            } else {
+                showToast('发送失败，请重试', 'error');
+            }
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.textContent = '发送';
+            }
+        }
+
+        if (dom.closeFriendCodeBtn) dom.closeFriendCodeBtn.addEventListener('click', closeFriendCodeModal);
+        if (dom.friendCodeModal) dom.friendCodeModal.addEventListener('click', e => { if (e.target === dom.friendCodeModal) closeFriendCodeModal(); });
+        if (dom.friendCodeSubmitBtn) dom.friendCodeSubmitBtn.addEventListener('click', verifyFriendCode);
+        if (dom.friendCodeInput) dom.friendCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') verifyFriendCode(); });
+        if (dom.messageInputPlaceholder) dom.messageInputPlaceholder.addEventListener('click', openFriendCodeModal);
 
 
         // ============ 头像裁剪 ============
@@ -3546,6 +4256,10 @@
                         <input type="url" class="item-image-url-input" placeholder="https://... 粘贴图片链接" oninput="updateItemImagePreview(this)">
                     </div>
                     ${isGame ? `
+                        <div class="game-remark-input-wrap">
+                            <span style="font-size:13px;color:var(--text-secondary);">游戏备注</span>
+                            <input type="text" class="item-remark-input" placeholder="例如：500小时玩家 · 全神庙通关">
+                        </div>
                         <div class="game-screenshots-input-wrap">
                             <div class="game-screenshots-input-header">
                                 <span style="font-size:13px;color:var(--text-secondary);">截图链接（每行一个）</span>
