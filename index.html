@@ -964,19 +964,51 @@
             color: #ef4444;
             border-color: #ef4444;
         }
-        .setting-interest-img {
-            width: 50px; height: 50px;
-            border-radius: 6px;
-            object-fit: cover;
+        .setting-interest-img-wrap {
             flex-shrink: 0;
-            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            overflow: hidden;
             border: 1px solid var(--border);
+            background: var(--bg-body);
+        }
+        .setting-interest-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .interest-item-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 6px;
+            min-width: 0;
+        }
+        .item-image-url-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .item-image-url-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            padding-left: 2px;
+        }
+        .item-image-url-input {
+            padding: 6px 10px;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .item-image-url-input:focus {
+            outline: none;
+            border-color: var(--accent);
         }
         .interest-item-content input {
             padding: 6px 10px;
@@ -1528,12 +1560,31 @@
             width: 100%;
             height: 140px;
             overflow: hidden;
+            background: var(--bg-body);
+            position: relative;
+            flex-shrink: 0;
+        }
+        .interest-item-img-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--bg-body);
+            background-image: linear-gradient(45deg, var(--border) 25%, transparent 25%),
+                              linear-gradient(-45deg, var(--border) 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, var(--border) 75%),
+                              linear-gradient(-45deg, transparent 75%, var(--border) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            opacity: 0.3;
         }
         .interest-item-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+            display: block;
         }
         .interest-item-info {
             padding: 10px 12px;
@@ -1855,6 +1906,21 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: var(--shadow-sm);
+            background: var(--bg-body);
+            position: relative;
+        }
+        .game-screenshot-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--bg-body);
+            background-image: linear-gradient(45deg, var(--border) 25%, transparent 25%),
+                              linear-gradient(-45deg, var(--border) 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, var(--border) 75%),
+                              linear-gradient(-45deg, transparent 75%, var(--border) 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+            opacity: 0.3;
         }
         .game-screenshot-item:hover {
             transform: translateY(-3px);
@@ -1865,6 +1931,9 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.4s ease;
+            position: relative;
+            z-index: 1;
+            display: block;
         }
         .game-screenshot-item:hover img {
             transform: scale(1.05);
@@ -1949,6 +2018,12 @@
             }
             .post-detail-title {
                 font-size: 20px;
+            }
+            .interest-input-item {
+                flex-wrap: wrap;
+            }
+            .interest-item-content {
+                width: 100%;
             }
         }
 
@@ -3104,6 +3179,8 @@
                         addInterestItem(cat, true);
                         const lastItem = list.lastElementChild;
                         lastItem.querySelector('.item-title-input').value = item.title || '';
+                        const imgUrlInput = lastItem.querySelector('.item-image-url-input');
+                        if (imgUrlInput) imgUrlInput.value = item.image || '';
                         lastItem.querySelector('.item-img').dataset.src = item.image || '';
                         lastItem.querySelector('.item-img').src = item.image || FALLBACK_IMG;
                         if (!isGame) {
@@ -3458,11 +3535,16 @@
             item.dataset.index = list.children.length;
             const isGame = category === 'game';
             item.innerHTML = `
-                <img class="setting-interest-img item-img" src="${FALLBACK_IMG}" alt="封面"
-                     onclick="uploadItemImage(this, '${category}')"
-                     onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+                <div class="setting-interest-img-wrap">
+                    <img class="setting-interest-img item-img" src="${FALLBACK_IMG}" alt="封面"
+                         onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+                </div>
                 <div class="interest-item-content">
                     <input type="text" class="item-title-input" placeholder="标题">
+                    <div class="item-image-url-wrap">
+                        <span class="item-image-url-label">封面图片URL</span>
+                        <input type="url" class="item-image-url-input" placeholder="https://... 粘贴图片链接" oninput="updateItemImagePreview(this)">
+                    </div>
                     ${isGame ? `
                         <div class="game-screenshots-input-wrap">
                             <div class="game-screenshots-input-header">
@@ -3515,23 +3597,17 @@
             showToast('已删除', 'info');
         };
 
-        window.uploadItemImage = function(imgEl, category) {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = e => {
-                const file = e.target.files[0];
-                if (!file) return;
-                if (file.size > 5 * 1024 * 1024) { showToast('图片不能超过5MB', 'warning'); return; }
-                const reader = new FileReader();
-                reader.onload = ev => {
-                    imgEl.src = ev.target.result;
-                    imgEl.dataset.src = ev.target.result;
-                    showToast('图片已上传', 'success');
-                };
-                reader.readAsDataURL(file);
-            };
-            input.click();
+        window.updateItemImagePreview = function(inputEl) {
+            const item = inputEl.closest('.interest-input-item');
+            const img = item.querySelector('.item-img');
+            const url = inputEl.value.trim();
+            if (url) {
+                img.src = url;
+                img.dataset.src = url;
+            } else {
+                img.src = FALLBACK_IMG;
+                img.dataset.src = '';
+            }
         };
 
         // ============ 滚动动画（Intersection Observer） ============
