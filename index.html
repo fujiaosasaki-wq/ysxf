@@ -6,19 +6,36 @@
     <title>云散星繁的小站</title>
     <script>
         (function() {
-            var w = window.innerWidth || document.documentElement.clientWidth;
-            if (w <= 900) {
-                document.documentElement.classList.add('mobile-view');
+            function checkMobile() {
+                var w = Math.min(window.innerWidth, document.documentElement.clientWidth);
+                var html = document.documentElement;
+                if (w <= 900) {
+                    html.classList.add('mobile-view');
+                } else {
+                    html.classList.remove('mobile-view');
+                }
+                if (w <= 480) {
+                    html.classList.add('small-mobile');
+                } else {
+                    html.classList.remove('small-mobile');
+                }
             }
-            if (w <= 480) {
-                document.documentElement.classList.add('small-mobile');
-            }
+            checkMobile();
+            window.addEventListener('resize', checkMobile);
+            window.addEventListener('orientationchange', function() {
+                setTimeout(checkMobile, 100);
+            });
         })();
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+            width: 100%;
+        }
         html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -27,7 +44,16 @@
             line-height: 1.6;
             transition: background 0.4s ease, color 0.4s ease;
             min-height: 100vh;
-            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        img { max-width: 100%; height: auto; }
+        a { max-width: 100%; }
+        .hero, .navbar, .footer, .main-container, .posts-section, .sidebar, .sidebar-card, .post-card, .moment-card, .friend-card {
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         :root {
@@ -1130,17 +1156,49 @@
                 margin: -30px auto 40px;
                 padding: 0 16px;
                 gap: 16px;
+                max-width: 100%;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .posts-section {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
             }
             .sidebar {
                 order: -1;
                 gap: 16px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
-            .sidebar-card { padding: 16px; }
+            .sidebar-card { 
+                padding: 16px; 
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            .footer {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
             .profile-avatar { margin-top: 0; }
-            .navbar { padding: 0 16px; }
+            .navbar { 
+                padding: 0 16px; 
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
             .nav-menu { display: none; }
+            .hero { 
+                height: 340px; 
+                width: 100%;
+                max-width: 100%;
+                overflow: hidden;
+            }
             .hero-title { font-size: 30px; }
-            .hero { height: 340px; }
             .music-player { display: none; }
             .admin-fab { bottom: 80px; right: 16px; width: 44px; height: 44px; }
             .back-to-top { bottom: 140px; right: 16px; }
@@ -1207,21 +1265,58 @@
             .post-cover { height: 160px; }
         }
 
-        html.mobile-view .main-container { grid-template-columns: 1fr; }
-        html.mobile-view .sidebar { order: -1; }
-        html.mobile-view .profile-avatar { margin-top: 0; }
-        html.mobile-view .navbar { padding: 0 16px; }
+        html.mobile-view .main-container { 
+            grid-template-columns: 1fr; 
+            margin: -30px auto 40px; 
+            padding: 0 16px; 
+            gap: 16px; 
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        html.mobile-view .posts-section {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        html.mobile-view .sidebar { 
+            order: -1; 
+            gap: 16px; 
+            width: 100%; 
+            max-width: 100%; 
+            box-sizing: border-box;
+        }
+        html.mobile-view .sidebar-card { 
+            padding: 16px; 
+            width: 100%; 
+            max-width: 100%; 
+            box-sizing: border-box;
+        }
+        html.mobile-view .footer {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        html.mobile-view .navbar { 
+            padding: 0 16px; 
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
         html.mobile-view .nav-menu { display: none; }
         html.mobile-view .hero-title { font-size: 30px; }
-        html.mobile-view .hero { height: 340px; }
+        html.mobile-view .hero { 
+            height: 340px; 
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
         html.mobile-view .music-player { display: none; }
         html.mobile-view .admin-fab { bottom: 80px; right: 16px; width: 44px; height: 44px; }
         html.mobile-view .back-to-top { bottom: 140px; right: 16px; }
         html.mobile-view .interest-item-card { width: 120px; }
         html.mobile-view .interest-item-img-wrap { height: 120px; }
-        html.mobile-view .main-container { margin: -30px auto 40px; padding: 0 16px; gap: 16px; }
-        html.mobile-view .sidebar { gap: 16px; }
-        html.mobile-view .sidebar-card { padding: 16px; }
         html.mobile-view .post-card { animation: none; opacity: 1; transform: none; }
         html.mobile-view .moment-card { animation: none; opacity: 1; transform: none; }
         html.mobile-view .friend-card { animation: none; opacity: 1; transform: none; }
