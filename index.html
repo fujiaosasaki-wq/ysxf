@@ -2,8 +2,19 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>云散星繁的小站</title>
+    <script>
+        (function() {
+            var w = window.innerWidth || document.documentElement.clientWidth;
+            if (w <= 900) {
+                document.documentElement.classList.add('mobile-view');
+            }
+            if (w <= 480) {
+                document.documentElement.classList.add('small-mobile');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <style>
@@ -597,11 +608,19 @@
         .footer {
             background: var(--bg-card);
             border-top: 1px solid var(--border);
-            padding: 30px 24px;
-            text-align: center;
+            padding: 24px 20px;
             color: var(--text-muted);
             font-size: 13px;
             margin-top: 40px;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
         }
         .footer a {
             color: var(--text-muted);
@@ -609,6 +628,22 @@
             transition: color 0.2s;
         }
         .footer a:hover { color: var(--accent); }
+        .footer-settings-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 6px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+        .footer-settings-btn:hover {
+            color: var(--accent);
+            opacity: 1;
+            transform: rotate(45deg);
+        }
 
         /* ===== 音乐播放器（悬浮） ===== */
         .music-player {
@@ -1051,16 +1086,57 @@
         @media (max-width: 900px) {
             .main-container {
                 grid-template-columns: 1fr;
+                margin: -30px auto 40px;
+                padding: 0 16px;
+                gap: 16px;
             }
             .sidebar {
                 order: -1;
+                gap: 16px;
             }
+            .sidebar-card { padding: 16px; }
             .profile-avatar { margin-top: 0; }
             .navbar { padding: 0 16px; }
             .nav-menu { display: none; }
             .hero-title { font-size: 30px; }
             .hero { height: 340px; }
             .music-player { display: none; }
+            .admin-fab { bottom: 80px; right: 16px; width: 44px; height: 44px; }
+            .back-to-top { bottom: 140px; right: 16px; }
+            .interest-item-card { width: 120px; }
+            .interest-item-img-wrap { height: 120px; }
+            .post-card, .moment-card, .friend-card, .sidebar-card {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+            .reveal, .reveal-left, .reveal-right, .reveal-scale {
+                opacity: 1;
+                transform: none;
+            }
+            .modal-overlay { align-items: flex-end; }
+            .modal-content {
+                max-width: 95%;
+                max-height: 90vh;
+                margin: 10px;
+                border-radius: 20px 20px 0 0;
+                transform: translateY(100%);
+                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .modal-overlay.active .modal-content {
+                transform: translateY(0);
+            }
+            .admin-login-modal { align-items: center; }
+            .admin-login-modal .modal-content {
+                border-radius: var(--radius-xl);
+                margin: auto;
+                transform: scale(0.9) translateY(20px);
+            }
+            .admin-login-modal.active .modal-content {
+                transform: scale(1) translateY(0);
+            }
+            .settings-tabs { gap: 2px; }
+            .tab-btn { padding: 8px 10px; font-size: 12px; }
         }
 
         @media (max-width: 480px) {
@@ -1068,6 +1144,73 @@
             .hero-subtitle { font-size: 14px; }
             .modal-content { padding: 20px; }
             .post-cover { height: 160px; }
+        }
+
+        html.mobile-view .main-container { grid-template-columns: 1fr; }
+        html.mobile-view .sidebar { order: -1; }
+        html.mobile-view .profile-avatar { margin-top: 0; }
+        html.mobile-view .navbar { padding: 0 16px; }
+        html.mobile-view .nav-menu { display: none; }
+        html.mobile-view .hero-title { font-size: 30px; }
+        html.mobile-view .hero { height: 340px; }
+        html.mobile-view .music-player { display: none; }
+        html.mobile-view .admin-fab { bottom: 80px; right: 16px; width: 44px; height: 44px; }
+        html.mobile-view .back-to-top { bottom: 140px; right: 16px; }
+        html.mobile-view .interest-item-card { width: 120px; }
+        html.mobile-view .interest-item-img-wrap { height: 120px; }
+        html.mobile-view .main-container { margin: -30px auto 40px; padding: 0 16px; gap: 16px; }
+        html.mobile-view .sidebar { gap: 16px; }
+        html.mobile-view .sidebar-card { padding: 16px; }
+        html.mobile-view .post-card { animation: none; opacity: 1; transform: none; }
+        html.mobile-view .moment-card { animation: none; opacity: 1; transform: none; }
+        html.mobile-view .friend-card { animation: none; opacity: 1; transform: none; }
+        html.mobile-view .sidebar-card { animation: none; opacity: 1; transform: none; }
+        html.mobile-view .reveal,
+        html.mobile-view .reveal-left,
+        html.mobile-view .reveal-right,
+        html.mobile-view .reveal-scale {
+            opacity: 1;
+            transform: none;
+        }
+
+        html.small-mobile .hero-title { font-size: 24px; }
+        html.small-mobile .hero-subtitle { font-size: 14px; }
+        html.small-mobile .modal-content { padding: 20px; }
+        html.small-mobile .post-cover { height: 160px; }
+
+        html.mobile-view .modal-content {
+            max-width: 95%;
+            max-height: 90vh;
+            margin: 10px;
+        }
+        html.mobile-view .settings-tabs {
+            gap: 2px;
+        }
+        html.mobile-view .tab-btn {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+        html.mobile-view .modal-overlay {
+            align-items: flex-end;
+        }
+        html.mobile-view .modal-content {
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html.mobile-view .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        html.mobile-view .admin-login-modal {
+            align-items: center;
+        }
+        html.mobile-view .admin-login-modal .modal-content {
+            border-radius: var(--radius-xl);
+            margin: auto;
+            transform: scale(0.9) translateY(20px);
+        }
+        html.mobile-view .admin-login-modal.active .modal-content {
+            transform: scale(1) translateY(0);
         }
 
         /* 设置分页签 */
@@ -1534,7 +1677,12 @@
 
     <!-- 底部 -->
     <footer class="footer" id="footerContent">
-        © 2026 云散星繁的小站 | Powered by Love ☕
+        <div class="footer-content">
+            <span id="footerText">© 2026 云散星繁的小站 | Powered by Love ☕</span>
+            <button class="footer-settings-btn" id="footerSettingsBtn" title="设置" aria-label="设置">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
     </footer>
 
     <!-- 音乐播放器 -->
@@ -1946,6 +2094,8 @@
             interestsContainer: $('interestsContainer'),
             backToTop: $('backToTop'),
             footerContent: $('footerContent'),
+            footerText: $('footerText'),
+            footerSettingsBtn: $('footerSettingsBtn'),
             musicPlayer: $('musicPlayer'),
             musicCover: $('musicCover'),
             musicTitle: $('musicTitle'),
@@ -2356,7 +2506,11 @@
             }
 
             // 页脚
-            dom.footerContent.innerHTML = cfg.footer || defaultConfig.footer;
+            if (dom.footerText) {
+                dom.footerText.textContent = cfg.footer || defaultConfig.footer;
+            } else {
+                dom.footerContent.innerHTML = cfg.footer || defaultConfig.footer;
+            }
         }
 
         // ============ 填表单 ============
@@ -2552,6 +2706,15 @@
         dom.adminFab.addEventListener('click', () => {
             fillForm(loadLocalConfig());
             dom.modal.classList.add('active');
+        });
+
+        dom.footerSettingsBtn.addEventListener('click', () => {
+            if (isAdminMode) {
+                fillForm(loadLocalConfig());
+                dom.modal.classList.add('active');
+            } else {
+                checkAdminMode();
+            }
         });
 
         async function doAdminLogin() {
