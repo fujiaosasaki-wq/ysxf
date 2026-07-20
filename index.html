@@ -2102,7 +2102,6 @@
             infoViews: $('infoViews'),
             postsList: $('postsList'),
             momentsList: $('momentsList'),
-            friendsList: $('friendsList'),
             interestsContainer: $('interestsContainer'),
             backToTop: $('backToTop'),
             footerContent: $('footerContent'),
@@ -2462,21 +2461,6 @@
                 `).join('');
             } else {
                 dom.momentsList.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px 0;">暂无说说</p>';
-            }
-
-            // 友链
-            if (cfg.friends && cfg.friends.length) {
-                dom.friendsList.innerHTML = cfg.friends.map((f, i) => `
-                    <a href="${escapeHtml(f.url)}" class="friend-card" target="_blank" style="animation-delay:${0.05 + i * 0.05}s">
-                        <img class="friend-avatar" src="${escapeHtml(f.avatar || FALLBACK_AVATAR)}" alt="${escapeHtml(f.name)}" onerror="this.onerror=null;this.src='${FALLBACK_AVATAR}'">
-                        <div class="friend-info">
-                            <div class="friend-name">${escapeHtml(f.name)}</div>
-                            <div class="friend-desc">${escapeHtml(f.desc || '')}</div>
-                        </div>
-                    </a>
-                `).join('');
-            } else {
-                dom.friendsList.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px 0;grid-column:1/-1;">暂无友链</p>';
             }
 
             // 兴趣展示
