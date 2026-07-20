@@ -1594,7 +1594,6 @@
     <nav class="navbar">
         <div class="nav-left">
             <div class="nav-logo">
-                <i class="fas fa-feather-alt"></i>
                 <span id="navSiteName">云散星繁</span>
             </div>
         </div>
@@ -1650,14 +1649,6 @@
                 </div>
             </div>
 
-            <!-- 友链区 -->
-            <div class="friends-section reveal">
-                <div class="section-title"><i class="fas fa-link"></i> 友情链接</div>
-                <div class="section-subtitle">认识更多有趣的人</div>
-                <div id="friendsList" class="friend-grid">
-                    <!-- 动态生成友链 -->
-                </div>
-            </div>
         </main>
 
         <!-- 侧边栏 -->
@@ -1676,10 +1667,6 @@
                     <div class="stat-item">
                         <div class="stat-num" id="statMoments">0</div>
                         <div class="stat-label">说说</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-num" id="statFriends">0</div>
-                        <div class="stat-label">友链</div>
                     </div>
                 </div>
                 <div class="profile-social" id="sidebarSocial">
@@ -1776,7 +1763,6 @@
                 <button class="tab-btn" data-tab="tab-hero">首页大图</button>
                 <button class="tab-btn" data-tab="tab-posts">文章/动态</button>
                 <button class="tab-btn" data-tab="tab-moments">说说</button>
-                <button class="tab-btn" data-tab="tab-friends">友链</button>
                 <button class="tab-btn" data-tab="tab-sidebar">侧边栏</button>
                 <button class="tab-btn" data-tab="tab-interests">兴趣展示</button>
                 <button class="tab-btn" data-tab="tab-nav">导航菜单</button>
@@ -1854,14 +1840,6 @@
                 <div class="setting-group">
                     <label>说说列表（每行一个：内容|日期）</label>
                     <textarea id="inputMoments" rows="6" placeholder="示例：&#10;今天天气真好！|2026-07-15&#10;学会了一个新技能~|2026-07-10"></textarea>
-                </div>
-            </div>
-
-            <!-- 友链 -->
-            <div class="tab-panel" id="tab-friends">
-                <div class="setting-group">
-                    <label>友情链接（每行一个：名称|头像URL|链接|简介）</label>
-                    <textarea id="inputFriends" rows="6" placeholder="示例：&#10;张三的博客|https://xxx.com/avatar.jpg|https://xxx.com|一个有趣的博客"></textarea>
                 </div>
             </div>
 
@@ -2063,8 +2041,7 @@
             nav: [
                 { name: '主页', url: '#home', icon: 'fa-home' },
                 { name: '文章', url: '#posts', icon: 'fa-newspaper' },
-                { name: '说说', url: '#moments', icon: 'fa-comment-dots' },
-                { name: '友链', url: '#friends', icon: 'fa-link' }
+                { name: '说说', url: '#moments', icon: 'fa-comment-dots' }
             ],
             posts: [
                 { title: '欢迎来到我的小站', cover: 'https://picsum.photos/seed/post1/600/350', url: '#', excerpt: '这是我的第一篇文章，记录这个小站的诞生。从今天开始，我会在这里分享我的生活和技术心得~', tags: ['公告', '生活'], sticky: true, date: '2026-07-01' },
@@ -2075,12 +2052,6 @@
                 { content: '今天把小站改造好了，焕然一新的感觉真不错！🎉', date: '2026-07-20' },
                 { content: '最近在玩原神，须弥的风景真的太治愈了~', date: '2026-07-15' },
                 { content: '学会了一道新菜，味道还不错哈哈', date: '2026-07-10' }
-            ],
-            friends: [
-                { name: '张三的博客', avatar: 'https://picsum.photos/seed/f1/80/80', url: '#', desc: '一个有趣的技术博客' },
-                { name: '李四的小站', avatar: 'https://picsum.photos/seed/f2/80/80', url: '#', desc: '分享生活的点点滴滴' },
-                { name: '王五的随笔', avatar: 'https://picsum.photos/seed/f3/80/80', url: '#', desc: '文字里的世界' },
-                { name: '赵六的摄影', avatar: 'https://picsum.photos/seed/f4/80/80', url: '#', desc: '用镜头记录美好' }
             ],
             notice: '🎉 欢迎来到我的小站~ 这里记录我的生活、技术和兴趣。网站正在持续建设中...',
             tags: ['Vue', 'JavaScript', 'CSS', '生活', '摄影', '旅行', '游戏', '动漫', '音乐', '美食', '电影', '读书'],
@@ -2124,7 +2095,6 @@
             sidebarSocial: $('sidebarSocial'),
             statPosts: $('statPosts'),
             statMoments: $('statMoments'),
-            statFriends: $('statFriends'),
             noticeContent: $('noticeContent'),
             tagCloud: $('tagCloud'),
             infoPosts: $('infoPosts'),
@@ -2156,7 +2126,6 @@
             inputHeroBg: $('inputHeroBg'),
             inputPosts: $('inputPosts'),
             inputMoments: $('inputMoments'),
-            inputFriends: $('inputFriends'),
             inputNotice: $('inputNotice'),
             inputTags: $('inputTags'),
             inputStartDate: $('inputStartDate'),
@@ -2443,10 +2412,8 @@
             // 统计
             const postsCount = (cfg.posts || []).length;
             const momentsCount = (cfg.moments || []).length;
-            const friendsCount = (cfg.friends || []).length;
             dom.statPosts.textContent = postsCount;
             dom.statMoments.textContent = momentsCount;
-            dom.statFriends.textContent = friendsCount;
             dom.infoPosts.textContent = postsCount;
             dom.infoDays.textContent = calcDays(cfg.startDate) + ' 天';
             dom.infoViews.textContent = cfg.views || '0';
@@ -2571,7 +2538,6 @@
 
             dom.inputPosts.value = postsToText(cfg.posts);
             dom.inputMoments.value = momentsToText(cfg.moments);
-            dom.inputFriends.value = friendsToText(cfg.friends);
 
             dom.inputNotice.value = cfg.notice || '';
             dom.inputTags.value = tagsToText(cfg.tags);
@@ -2596,6 +2562,26 @@
                         lastItem.querySelector('.item-img').dataset.src = item.image || '';
                         lastItem.querySelector('.item-img').src = item.image || FALLBACK_IMG;
                         lastItem.querySelector('.item-url-input').value = item.url || '';
+                    });
+                }
+            });
+
+            // 默认全部锁定
+            const avatarGroup = document.getElementById('avatarGroup');
+            const lockAvatarBtn = document.getElementById('lockAvatar');
+            if (avatarGroup && lockAvatarBtn) {
+                avatarGroup.classList.add('avatar-locked');
+                lockAvatarBtn.classList.add('locked');
+                lockAvatarBtn.textContent = '🔓 解锁';
+            }
+            ['music', 'anime', 'game'].forEach(cat => {
+                const btn = document.getElementById('lock' + cat.charAt(0).toUpperCase() + cat.slice(1));
+                const list = document.getElementById(cat + 'List');
+                if (btn && list) {
+                    btn.classList.add('locked');
+                    btn.textContent = '🔓 解锁';
+                    list.querySelectorAll('.interest-input-item').forEach(item => {
+                        item.classList.add('locked');
                     });
                 }
             });
@@ -2627,7 +2613,6 @@
                 nav:    parseNav(dom.inputNav.value),
                 posts:  parsePosts(dom.inputPosts.value),
                 moments: parseMoments(dom.inputMoments.value),
-                friends: parseFriends(dom.inputFriends.value),
                 notice: dom.inputNotice.value.trim(),
                 tags:   parseTags(dom.inputTags.value),
                 startDate: dom.inputStartDate.value.trim(),
