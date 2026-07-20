@@ -886,7 +886,7 @@
             opacity: 0.6;
             pointer-events: none;
         }
-        .interest-item-img {
+        .setting-interest-img {
             width: 50px; height: 50px;
             border-radius: 6px;
             object-fit: cover;
@@ -1137,6 +1137,26 @@
             }
             .settings-tabs { gap: 2px; }
             .tab-btn { padding: 8px 10px; font-size: 12px; }
+            .setting-group { margin-bottom: 16px; }
+            .setting-group label { font-size: 13px; }
+            .setting-group input[type="text"],
+            .setting-group input[type="url"],
+            .setting-group textarea {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            .interest-input-item { padding: 10px; gap: 8px; }
+            .setting-interest-img { width: 44px; height: 44px; }
+            .interest-item-content input {
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+            .btn-add { padding: 8px; font-size: 12px; }
+            .modal-actions { margin-top: 16px; padding-top: 12px; }
+            .btn-cancel, .btn-save, .btn-reset {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1189,6 +1209,28 @@
         html.mobile-view .tab-btn {
             padding: 8px 10px;
             font-size: 12px;
+        }
+        html.mobile-view .setting-group { margin-bottom: 16px; }
+        html.mobile-view .setting-group label { font-size: 13px; }
+        html.mobile-view .setting-group input[type="text"],
+        html.mobile-view .setting-group input[type="url"],
+        html.mobile-view .setting-group textarea {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        html.mobile-view .interest-input-item { padding: 10px; gap: 8px; }
+        html.mobile-view .setting-interest-img { width: 44px; height: 44px; }
+        html.mobile-view .interest-item-content input {
+            padding: 5px 8px;
+            font-size: 12px;
+        }
+        html.mobile-view .btn-add { padding: 8px; font-size: 12px; }
+        html.mobile-view .modal-actions { margin-top: 16px; padding-top: 12px; }
+        html.mobile-view .btn-cancel,
+        html.mobile-view .btn-save,
+        html.mobile-view .btn-reset {
+            padding: 8px 16px;
+            font-size: 13px;
         }
         html.mobile-view .modal-overlay {
             align-items: flex-end;
@@ -2805,7 +2847,7 @@
             item.className = 'interest-input-item';
             item.dataset.index = list.children.length;
             item.innerHTML = `
-                <img class="interest-item-img item-img" src="${FALLBACK_IMG}" alt="封面"
+                <img class="setting-interest-img item-img" src="${FALLBACK_IMG}" alt="封面"
                      onclick="uploadItemImage(this, '${category}')"
                      onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
                 <div class="interest-item-content">
