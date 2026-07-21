@@ -4212,7 +4212,7 @@
             item.dataset.index = list.children.length;
             item.innerHTML = `
                 <div class="setting-interest-img-wrap">
-                    <img class="setting-interest-img item-img" src="${data?.cover || FALLBACK_IMG}" alt="封面"
+                    <img class="setting-interest-img item-img" src="${data?.cover || FALLBACK_IMG}" data-src="${data?.cover || ''}" alt="封面"
                          onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
                 </div>
                 <div class="interest-item-content">
