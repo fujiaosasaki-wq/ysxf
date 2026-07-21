@@ -521,21 +521,27 @@
             line-height: 1.6;
             margin-bottom: 14px;
         }
-        .profile-stats {
+        .profile-tags {
             display: flex;
-            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 8px;
             padding-top: 12px;
             border-top: 1px solid var(--border);
+            justify-content: center;
         }
-        .stat-item { text-align: center; }
-        .stat-num {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent);
+        .profile-tag {
+            padding: 4px 10px;
+            background: var(--bg-body);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
+        .profile-tag:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
         }
         .profile-social {
             display: flex;
@@ -1193,6 +1199,34 @@
         .interest-item-content input:focus {
             outline: none;
             border-color: var(--accent);
+        }
+        .tag-item-content {
+            flex-direction: row;
+        }
+        .tag-item-content input {
+            flex: 1;
+        }
+        .moment-item-content textarea {
+            width: 100%;
+            padding: 6px 10px;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            resize: vertical;
+        }
+        .moment-item-content textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .nav-item-content {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        .nav-item-content input {
+            flex: 1;
+            min-width: 120px;
         }
         .item-img-actions {
             display: flex;
@@ -2486,15 +2520,8 @@
                 <div class="profile-name" id="sidebarName">正在加载</div>
                 <div class="profile-title" id="sidebarTitle">等待云端响应</div>
                 <div class="profile-bio" id="sidebarBio">...</div>
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <div class="stat-num" id="statPosts">0</div>
-                        <div class="stat-label">文章</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-num" id="statMoments">0</div>
-                        <div class="stat-label">说说</div>
-                    </div>
+                <div class="profile-tags" id="profileTags">
+                    <!-- 动态生成自定义标签 -->
                 </div>
 
             <!-- 公告 -->
@@ -2673,8 +2700,10 @@
                     <span class="setting-tip">显示在"碎碎念"标题下方的小字</span>
                 </div>
                 <div class="setting-group">
-                    <label>说说列表（每行一个：内容|日期）</label>
-                    <textarea id="inputMoments" rows="6" placeholder="示例：&#10;今天天气真好！|2026-07-15&#10;学会了一个新技能~|2026-07-10"></textarea>
+                    <label>说说列表</label>
+                    <div id="momentsList" class="interests-input-list"></div>
+                    <button type="button" class="btn-add" onclick="addMomentItem()">+ 添加说说</button>
+                    <span class="setting-tip">每个说说包含：内容和日期。点击锁图标可锁定单项防止误修改。</span>
                 </div>
             </div>
 
@@ -2685,8 +2714,10 @@
                     <textarea id="inputNotice" rows="3" placeholder="显示在侧边栏公告区" maxlength="200"></textarea>
                 </div>
                 <div class="setting-group">
-                    <label>标签云（用英文逗号分隔）</label>
-                    <textarea id="inputTags" rows="3" placeholder="例如：Vue, React, 生活, 摄影, 旅行"></textarea>
+                    <label>个人标签</label>
+                    <div id="tagsList" class="interests-input-list"></div>
+                    <button type="button" class="btn-add" onclick="addTagItem()">+ 添加标签</button>
+                    <span class="setting-tip">每个标签包含：标签名（如MBTI、星座）和内容（如INTJ、处女座）。点击锁图标可锁定单项防止误修改。</span>
                 </div>
                 <div class="setting-group">
                     <label>网站运行开始日期</label>
@@ -2743,9 +2774,10 @@
             <!-- 导航菜单 -->
             <div class="tab-panel" id="tab-nav">
                 <div class="setting-group">
-                    <label>导航菜单（每行一个：名称|链接|图标名）</label>
-                    <textarea id="inputNav" rows="5" placeholder="示例：&#10;主页|#home|fa-home&#10;文章|#posts|fa-newspaper&#10;友链|#friends|fa-link"></textarea>
-                    <span class="setting-tip">图标名使用 FontAwesome，如 fa-home, fa-newspaper 等</span>
+                    <label>导航菜单</label>
+                    <div id="navList" class="interests-input-list"></div>
+                    <button type="button" class="btn-add" onclick="addNavItem()">+ 添加导航项</button>
+                    <span class="setting-tip">每个导航项包含：名称、链接、图标名（FontAwesome）。点击锁图标可锁定单项防止误修改。</span>
                 </div>
             </div>
 
@@ -3010,8 +3042,7 @@
             sidebarName: $('sidebarName'),
             sidebarTitle: $('sidebarTitle'),
             sidebarBio: $('sidebarBio'),
-            statPosts: $('statPosts'),
-            statMoments: $('statMoments'),
+            profileTags: $('profileTags'),
             noticeContent: $('noticeContent'),
             tagCloud: $('tagCloud'),
             friendMessagesList: $('friendMessagesList'),
@@ -3067,15 +3098,11 @@
             inputHeroTitle: $('inputHeroTitle'),
             inputHeroSubtitle: $('inputHeroSubtitle'),
             inputHeroBg: $('inputHeroBg'),
-            inputPosts: $('inputPosts'),
             inputPostsSubtitle: $('inputPostsSubtitle'),
-            inputMoments: $('inputMoments'),
             inputMomentsSubtitle: $('inputMomentsSubtitle'),
             inputNotice: $('inputNotice'),
-            inputTags: $('inputTags'),
             inputStartDate: $('inputStartDate'),
             inputViews: $('inputViews'),
-            inputNav: $('inputNav'),
             inputInterestsSubtitle: $('inputInterestsSubtitle'),
 
             btnUploadAvatar: $('btnUploadAvatar'),
@@ -3249,79 +3276,6 @@
         }
 
         // ============ 解析函数 ============
-        function parseLinks(text) {
-            if (!text) return [];
-            return text.split('\n').filter(l => l.trim()).map(line => {
-                const parts = line.split('|').map(p => p.trim());
-                return { name: parts[0] || '', url: parts[1] || '#', icon: parts[2] || 'fa-link' };
-            });
-        }
-        function linksToText(links) {
-            if (!links || !links.length) return '';
-            return links.map(l => `${l.name}|${l.url}|${l.icon || 'fa-link'}`).join('\n');
-        }
-        function parseNav(text) {
-            if (!text) return [];
-            return text.split('\n').filter(l => l.trim()).map(line => {
-                const parts = line.split('|').map(p => p.trim());
-                return { name: parts[0] || '', url: parts[1] || '#', icon: parts[2] || 'fa-circle' };
-            });
-        }
-        function navToText(nav) {
-            if (!nav || !nav.length) return '';
-            return nav.map(n => `${n.name}|${n.url}|${n.icon || 'fa-circle'}`).join('\n');
-        }
-        function parsePosts(text) {
-            if (!text) return [];
-            return text.split('\n').filter(l => l.trim()).map(line => {
-                const parts = line.split('|').map(p => p.trim());
-                const tags = parts[4] ? parts[4].split(',').map(t => t.trim()).filter(Boolean) : [];
-                const content = parts[6] ? parts[6].replace(/\\n/g, '\n') : '';
-                return {
-                    title: parts[0] || '',
-                    cover: parts[1] || '',
-                    url: parts[2] || '#',
-                    excerpt: parts[3] || '',
-                    tags: tags.slice(0, 3),
-                    date: parts[5] || '',
-                    content: content,
-                    sticky: false
-                };
-            });
-        }
-        function postsToText(posts) {
-            if (!posts || !posts.length) return '';
-            return posts.map(p => `${p.title}|${p.cover}|${p.url}|${p.excerpt}|${(p.tags||[]).join(',')}|${p.date||''}|${(p.content||'').replace(/\n/g, '\\n')}`).join('\n');
-        }
-        function parseMoments(text) {
-            if (!text) return [];
-            return text.split('\n').filter(l => l.trim()).map(line => {
-                const parts = line.split('|').map(p => p.trim());
-                return { content: parts[0] || '', date: parts[1] || '' };
-            });
-        }
-        function momentsToText(moments) {
-            if (!moments || !moments.length) return '';
-            return moments.map(m => `${m.content}|${m.date || ''}`).join('\n');
-        }
-        function parseFriends(text) {
-            if (!text) return [];
-            return text.split('\n').filter(l => l.trim()).map(line => {
-                const parts = line.split('|').map(p => p.trim());
-                return { name: parts[0] || '', avatar: parts[1] || '', url: parts[2] || '#', desc: parts[3] || '' };
-            });
-        }
-        function friendsToText(friends) {
-            if (!friends || !friends.length) return '';
-            return friends.map(f => `${f.name}|${f.avatar}|${f.url}|${f.desc}`).join('\n');
-        }
-        function parseTags(text) {
-            if (!text) return [];
-            return text.split(',').map(t => t.trim()).filter(Boolean);
-        }
-        function tagsToText(tags) {
-            return (tags || []).join(', ');
-        }
 
         function collectInterestData() {
             const result = {};
@@ -3500,9 +3454,10 @@
 
             // 统计
             const postsCount = (cfg.posts || []).length;
-            const momentsCount = (cfg.moments || []).length;
-            dom.statPosts.textContent = postsCount;
-            dom.statMoments.textContent = momentsCount;
+            const tags = cfg.tags || [];
+            dom.profileTags.innerHTML = tags.map(t => 
+                `<span class="profile-tag">${escapeHtml(t)}</span>`
+            ).join('');
             dom.infoPosts.textContent = postsCount;
             dom.infoDays.textContent = calcDays(cfg.startDate) + ' 天';
             dom.infoViews.textContent = cfg.views || '0';
@@ -3645,18 +3600,52 @@
                     });
                 }
             }
-            dom.inputMoments.value = momentsToText(cfg.moments);
+            const momentsList = $('momentsList');
+            if (momentsList) {
+                momentsList.innerHTML = '';
+                const moments = cfg.moments || [];
+                if (moments.length === 0) {
+                    addMomentItem(true);
+                } else {
+                    moments.forEach(m => {
+                        addMomentItem(true, m);
+                    });
+                }
+            }
 
             if (dom.inputPostsSubtitle) dom.inputPostsSubtitle.value = cfg.postsSubtitle || defaultConfig.postsSubtitle;
             if (dom.inputMomentsSubtitle) dom.inputMomentsSubtitle.value = cfg.momentsSubtitle || defaultConfig.momentsSubtitle;
             if (dom.inputInterestsSubtitle) dom.inputInterestsSubtitle.value = cfg.interestsSubtitle || defaultConfig.interestsSubtitle;
 
             dom.inputNotice.value = cfg.notice || '';
-            dom.inputTags.value = tagsToText(cfg.tags);
+            const tagsList = $('tagsList');
+            if (tagsList) {
+                tagsList.innerHTML = '';
+                const tags = cfg.tags || [];
+                if (tags.length === 0) {
+                    addTagItem(true);
+                } else {
+                    tags.forEach(tag => {
+                        const parts = tag.split(':').map(p => p.trim());
+                        addTagItem(true, { name: parts[0] || '', value: parts.slice(1).join(':') || '' });
+                    });
+                }
+            }
             dom.inputStartDate.value = cfg.startDate || '';
             dom.inputViews.value = cfg.views || '';
 
-            dom.inputNav.value = navToText(cfg.nav);
+            const navList = $('navList');
+            if (navList) {
+                navList.innerHTML = '';
+                const nav = cfg.nav || [];
+                if (nav.length === 0) {
+                    addNavItem(true);
+                } else {
+                    nav.forEach(n => {
+                        addNavItem(true, n);
+                    });
+                }
+            }
 
             // 兴趣列表
             ['music', 'anime', 'game'].forEach(cat => {
@@ -3762,11 +3751,11 @@
                 postsSubtitle: (dom.inputPostsSubtitle && dom.inputPostsSubtitle.value.trim()) || defaultConfig.postsSubtitle,
                 momentsSubtitle: (dom.inputMomentsSubtitle && dom.inputMomentsSubtitle.value.trim()) || defaultConfig.momentsSubtitle,
                 interestsSubtitle: (dom.inputInterestsSubtitle && dom.inputInterestsSubtitle.value.trim()) || defaultConfig.interestsSubtitle,
-                nav:    parseNav(dom.inputNav.value),
+                nav:    collectNavData(),
                 posts:  collectPostsData(),
-                moments: parseMoments(dom.inputMoments.value),
+                moments: collectMomentsData(),
                 notice: dom.inputNotice.value.trim(),
-                tags:   parseTags(dom.inputTags.value),
+                tags:   collectTagsData(),
                 startDate: dom.inputStartDate.value.trim(),
                 views:  dom.inputViews.value.trim() || '0',
                 interests: collectInterestData(),
@@ -4257,6 +4246,128 @@
             btn.closest('.interest-input-item').remove();
             showToast('已删除', 'info');
         };
+
+        window.addTagItem = function(silent, data) {
+            const list = $('tagsList');
+            if (!list) return;
+            const item = document.createElement('div');
+            item.className = 'interest-input-item locked';
+            item.dataset.index = list.children.length;
+            item.innerHTML = `
+                <div class="interest-item-content tag-item-content">
+                    <input type="text" class="item-tag-name-input" placeholder="标签名（如MBTI）" value="${data?.name || ''}">
+                    <input type="text" class="item-tag-value-input" placeholder="标签值（如INTJ）" value="${data?.value || ''}">
+                </div>
+                <div class="item-actions">
+                    <button type="button" class="item-lock-btn" onclick="toggleItemLock(this)" title="锁定/解锁">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <button type="button" class="item-delete-btn" onclick="deleteTagItem(this)" title="删除">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            list.appendChild(item);
+            if (!silent) showToast('已添加标签（默认锁定）', 'success');
+        };
+
+        window.deleteTagItem = function(btn) {
+            btn.closest('.interest-input-item').remove();
+            showToast('已删除', 'info');
+        };
+
+        function collectTagsData() {
+            const list = $('tagsList');
+            if (!list) return [];
+            const items = list.querySelectorAll('.interest-input-item');
+            return Array.from(items).map(item => {
+                const name = item.querySelector('.item-tag-name-input').value.trim();
+                const value = item.querySelector('.item-tag-value-input').value.trim();
+                return name && value ? `${name}: ${value}` : value || name;
+            }).filter(Boolean);
+        }
+
+        window.addMomentItem = function(silent, data) {
+            const list = $('momentsList');
+            if (!list) return;
+            const item = document.createElement('div');
+            item.className = 'interest-input-item locked';
+            item.dataset.index = list.children.length;
+            item.innerHTML = `
+                <div class="interest-item-content moment-item-content">
+                    <textarea class="item-moment-content-input" rows="2" placeholder="说说内容"></textarea>
+                    <input type="text" class="item-moment-date-input" placeholder="日期（如2026-07-15）" value="${data?.date || ''}">
+                </div>
+                <div class="item-actions">
+                    <button type="button" class="item-lock-btn" onclick="toggleItemLock(this)" title="锁定/解锁">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <button type="button" class="item-delete-btn" onclick="deleteMomentItem(this)" title="删除">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            list.appendChild(item);
+            const contentInput = item.querySelector('.item-moment-content-input');
+            contentInput.value = data?.content || '';
+            if (!silent) showToast('已添加说说（默认锁定）', 'success');
+        };
+
+        window.deleteMomentItem = function(btn) {
+            btn.closest('.interest-input-item').remove();
+            showToast('已删除', 'info');
+        };
+
+        function collectMomentsData() {
+            const list = $('momentsList');
+            if (!list) return [];
+            const items = list.querySelectorAll('.interest-input-item');
+            return Array.from(items).map(item => ({
+                content: item.querySelector('.item-moment-content-input').value.trim(),
+                date: item.querySelector('.item-moment-date-input').value.trim()
+            })).filter(item => item.content);
+        }
+
+        window.addNavItem = function(silent, data) {
+            const list = $('navList');
+            if (!list) return;
+            const item = document.createElement('div');
+            item.className = 'interest-input-item locked';
+            item.dataset.index = list.children.length;
+            item.innerHTML = `
+                <div class="interest-item-content nav-item-content">
+                    <input type="text" class="item-nav-name-input" placeholder="导航名称" value="${data?.name || ''}">
+                    <input type="text" class="item-nav-url-input" placeholder="链接地址" value="${data?.url || ''}">
+                    <input type="text" class="item-nav-icon-input" placeholder="图标名（如fa-home）" value="${data?.icon || ''}">
+                </div>
+                <div class="item-actions">
+                    <button type="button" class="item-lock-btn" onclick="toggleItemLock(this)" title="锁定/解锁">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <button type="button" class="item-delete-btn" onclick="deleteNavItem(this)" title="删除">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            list.appendChild(item);
+            if (!silent) showToast('已添加导航项（默认锁定）', 'success');
+        };
+
+        window.deleteNavItem = function(btn) {
+            btn.closest('.interest-input-item').remove();
+            showToast('已删除', 'info');
+        };
+
+        function collectNavData() {
+            const list = $('navList');
+            if (!list) return [];
+            const items = list.querySelectorAll('.interest-input-item');
+            return Array.from(items).map(item => ({
+                name: item.querySelector('.item-nav-name-input').value.trim(),
+                url: item.querySelector('.item-nav-url-input').value.trim() || '#',
+                icon: item.querySelector('.item-nav-icon-input').value.trim() || 'fa-circle'
+            })).filter(item => item.name);
+        }
 
         window.addInterestItem = function(category, silent) {
             const list = document.getElementById(category + 'List');
