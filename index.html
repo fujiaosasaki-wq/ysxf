@@ -2686,7 +2686,7 @@
                 </div>
                 <div class="setting-group">
                     <label>文章列表</label>
-                    <div id="postsList" class="interests-input-list"></div>
+                    <div id="postsSettingsList" class="interests-input-list"></div>
                     <button type="button" class="btn-add" onclick="addPostItem()">+ 添加文章</button>
                     <span class="setting-tip">每个文章包含：标题、封面图、链接、简介、标签、日期、内容。点击锁图标可锁定单项防止误修改。</span>
                 </div>
@@ -2701,7 +2701,7 @@
                 </div>
                 <div class="setting-group">
                     <label>说说列表</label>
-                    <div id="momentsList" class="interests-input-list"></div>
+                    <div id="momentsSettingsList" class="interests-input-list"></div>
                     <button type="button" class="btn-add" onclick="addMomentItem()">+ 添加说说</button>
                     <span class="setting-tip">每个说说包含：内容和日期。点击锁图标可锁定单项防止误修改。</span>
                 </div>
@@ -3305,7 +3305,7 @@
         }
 
         function collectPostsData() {
-            const list = $('postsList');
+            const list = $('postsSettingsList');
             if (!list) return [];
             const items = list.querySelectorAll('.interest-input-item');
             return Array.from(items).map(item => {
@@ -3588,7 +3588,7 @@
             dom.inputHeroSubtitle.value = cfg.heroSubtitle || '';
             dom.inputHeroBg.value = cfg.heroBg || '';
 
-            const postsList = $('postsList');
+            const postsList = $('postsSettingsList');
             if (postsList) {
                 postsList.innerHTML = '';
                 const posts = cfg.posts || [];
@@ -3600,7 +3600,7 @@
                     });
                 }
             }
-            const momentsList = $('momentsList');
+            const momentsList = $('momentsSettingsList');
             if (momentsList) {
                 momentsList.innerHTML = '';
                 const moments = cfg.moments || [];
@@ -4205,7 +4205,7 @@
         };
 
         window.addPostItem = function(silent, data) {
-            const list = $('postsList');
+            const list = $('postsSettingsList');
             if (!list) return;
             const item = document.createElement('div');
             item.className = 'interest-input-item locked';
@@ -4288,7 +4288,7 @@
         }
 
         window.addMomentItem = function(silent, data) {
-            const list = $('momentsList');
+            const list = $('momentsSettingsList');
             if (!list) return;
             const item = document.createElement('div');
             item.className = 'interest-input-item locked';
@@ -4319,7 +4319,7 @@
         };
 
         function collectMomentsData() {
-            const list = $('momentsList');
+            const list = $('momentsSettingsList');
             if (!list) return [];
             const items = list.querySelectorAll('.interest-input-item');
             return Array.from(items).map(item => ({
