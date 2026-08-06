@@ -2065,7 +2065,9 @@
         .post-detail-modal .modal-content {
             max-width: 720px;
             padding: 0;
-            overflow: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
         .post-detail-cover {
             width: 100%;
@@ -3795,14 +3797,28 @@
         }
 
         // ============ 弹窗 ============
+        let modalTouchHandler = null;
         function openModal() {
             fillForm(loadLocalConfig());
             dom.modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            // 阻止弹窗外部触摸事件穿透
+            modalTouchHandler = function(e) {
+                const modalContent = dom.modal.querySelector('.modal-content');
+                if (modalContent && !modalContent.contains(e.target)) {
+                    e.preventDefault();
+                }
+            };
+            dom.modal.addEventListener('touchmove', modalTouchHandler, { passive: false });
         }
         function closeModal() {
             dom.modal.classList.remove('active');
             document.body.style.overflow = '';
+            // 移除触摸事件处理
+            if (modalTouchHandler) {
+                dom.modal.removeEventListener('touchmove', modalTouchHandler);
+                modalTouchHandler = null;
+            }
         }
         dom.closeBtn.addEventListener('click', closeModal);
         dom.modal.addEventListener('click', e => { if (e.target === dom.modal) closeModal(); });
@@ -3827,15 +3843,28 @@
             }
             dom.postDetailModal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            // 阻止弹窗外部触摸事件穿透，允许内部滚动
+            dom.postDetailModal.addEventListener('touchmove', handleTouchMove, { passive: false });
         }
         function closePostDetail() {
             dom.postDetailModal.classList.remove('active');
             document.body.style.overflow = '';
+            // 移除触摸事件处理
+            dom.postDetailModal.removeEventListener('touchmove', handleTouchMove);
+        }
+        function handleTouchMove(e) {
+            const modalContent = dom.postDetailModal.querySelector('.modal-content');
+            if (!modalContent) return;
+            // 如果触摸点不在弹窗内容内，阻止默认行为
+            if (!modalContent.contains(e.target)) {
+                e.preventDefault();
+            }
         }
         if (dom.closePostDetailBtn) dom.closePostDetailBtn.addEventListener('click', closePostDetail);
         if (dom.postDetailModal) dom.postDetailModal.addEventListener('click', e => { if (e.target === dom.postDetailModal) closePostDetail(); });
 
         // ============ 游戏截图弹窗 ============
+        let gameTouchHandler = null;
         function openGameScreenshots(game) {
             if (!game) return;
             dom.gameScreenshotsTitle.innerHTML = `<i class="fas fa-gamepad"></i> ${escapeHtml(game.title)}`;
@@ -3851,24 +3880,51 @@
             }
             dom.gameScreenshotsModal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            // 阻止弹窗外部触摸事件穿透
+            gameTouchHandler = function(e) {
+                const modalContent = dom.gameScreenshotsModal.querySelector('.modal-content');
+                if (modalContent && !modalContent.contains(e.target)) {
+                    e.preventDefault();
+                }
+            };
+            dom.gameScreenshotsModal.addEventListener('touchmove', gameTouchHandler, { passive: false });
         }
         function closeGameScreenshots() {
             dom.gameScreenshotsModal.classList.remove('active');
             document.body.style.overflow = '';
+            // 移除触摸事件处理
+            if (gameTouchHandler) {
+                dom.gameScreenshotsModal.removeEventListener('touchmove', gameTouchHandler);
+                gameTouchHandler = null;
+            }
         }
         if (dom.closeGameScreenshotsBtn) dom.closeGameScreenshotsBtn.addEventListener('click', closeGameScreenshots);
         if (dom.gameScreenshotsModal) dom.gameScreenshotsModal.addEventListener('click', e => { if (e.target === dom.gameScreenshotsModal) closeGameScreenshots(); });
 
         // ============ 图片查看器 ============
+        let imageViewerTouchHandler = null;
         function openImageViewer(src) {
             if (!src) return;
             dom.imageViewerImg.src = src;
             dom.imageViewerModal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            // 阻止弹窗外部触摸事件穿透
+            imageViewerTouchHandler = function(e) {
+                const modalContent = dom.imageViewerModal.querySelector('.modal-content, .image-viewer-content');
+                if (modalContent && !modalContent.contains(e.target)) {
+                    e.preventDefault();
+                }
+            };
+            dom.imageViewerModal.addEventListener('touchmove', imageViewerTouchHandler, { passive: false });
         }
         function closeImageViewer() {
             dom.imageViewerModal.classList.remove('active');
             document.body.style.overflow = '';
+            // 移除触摸事件处理
+            if (imageViewerTouchHandler) {
+                dom.imageViewerModal.removeEventListener('touchmove', imageViewerTouchHandler);
+                imageViewerTouchHandler = null;
+            }
         }
         window.openImageViewer = openImageViewer;
         if (dom.imageViewerClose) dom.imageViewerClose.addEventListener('click', closeImageViewer);
