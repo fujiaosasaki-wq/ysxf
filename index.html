@@ -2900,60 +2900,8 @@
 
         // ============ SHA-256 ============
         async function sha256(text) {
-            if (typeof crypto !== 'undefined' && crypto.subtle) {
-                try {
-                    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-                    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-                } catch (e) { console.warn('crypto.subtle failed, falling back to pure JS', e); }
-            }
-            return sha256PureJS(text);
-        }
-        function sha256PureJS(text) {
-            const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
-                       0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
-                       0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
-                       0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
-                       0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
-                       0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
-                       0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
-                       0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
-            function rotr(n,x){return(x>>>n)|(x<<(32-n));}
-            function ch(x,y,z){return(x&y)^(~x&z);}
-            function maj(x,y,z){return(x&y)^(x&z)^(y&z);}
-            function sigma0(x){return rotr(2,x)^rotr(13,x)^rotr(22,x);}
-            function sigma1(x){return rotr(6,x)^rotr(11,x)^rotr(25,x);}
-            function gamma0(x){return rotr(7,x)^rotr(18,x)^(x>>>3);}
-            function gamma1(x){return rotr(17,x)^rotr(19,x)^(x>>>10);}
-            const msg=new TextEncoder().encode(text);
-            const len=msg.length*8;
-            const blocks=[];
-            let block=new Uint32Array(16);
-            let byteIdx=0;
-            for(let i=0;i<msg.length;i++){
-                const byte=msg[i];
-                block[byteIdx>>2]|=byte<<((3-(byteIdx&3))*8);
-                byteIdx++;
-                if(byteIdx===64){blocks.push(block.slice());block=new Uint32Array(16);byteIdx=0;}
-            }
-            block[byteIdx>>2]|=0x80<<((3-(byteIdx&3))*8);
-            if(byteIdx>55){blocks.push(block.slice());block=new Uint32Array(16);}
-            block[15]=len;blocks.push(block.slice());
-            let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,
-                h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
-            for(const w of blocks){
-                const words=new Uint32Array(64);
-                for(let i=0;i<16;i++)words[i]=w[i];
-                for(let i=16;i<64;i++){words[i]=(gamma1(words[i-2])+words[i-7]+gamma0(words[i-15])+words[i-16])>>>0;}
-                let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
-                for(let i=0;i<64;i++){
-                    const t1=(h+sigma1(e)+ch(e,f,g)+K[i]+words[i])>>>0;
-                    const t2=(sigma0(a)+maj(a,b,c))>>>0;
-                    h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0;
-                }
-                h0=(h0+a)>>>0;h1=(h1+b)>>>0;h2=(h2+c)>>>0;h3=(h3+d)>>>0;
-                h4=(h4+e)>>>0;h5=(h5+f)>>>0;h6=(h6+g)>>>0;h7=(h7+h)>>>0;
-            }
-            return [h0,h1,h2,h3,h4,h5,h6,h7].map(n=>n.toString(16).padStart(8,'0')).join('');
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         // ============ 常量 ============
@@ -2975,11 +2923,6 @@
             postsSubtitle: '分享技术与生活的点滴',
             momentsSubtitle: '记录生活中的小片段',
             interestsSubtitle: '生活不止眼前的代码',
-            links: [
-                { name: 'GitHub', url: '#', icon: 'fa-github' },
-                { name: '微博', url: '#', icon: 'fa-weibo' },
-                { name: '知乎', url: '#', icon: 'fa-zhihu' }
-            ],
             nav: [
                 { name: '主页', url: '#home', icon: 'fa-home' },
                 { name: '文章', url: '#posts', icon: 'fa-newspaper' },
@@ -3140,6 +3083,8 @@
         let cropperInstance = null;
         let toastTimer = null;
         let musicPlaying = false;
+        let cloudSynced = false;
+        let scrollObserver = null;
 
         // ============ 主题切换 ============
         function initTheme() {
@@ -3248,6 +3193,7 @@
                 const data = await resp.json();
                 const config = migrateConfig(data.record);
                 saveLocalConfig(config);
+                cloudSynced = true;
                 showCloudStatus('success', '云端同步成功');
                 return config;
             } catch (e) {
@@ -3321,7 +3267,7 @@
                     tags: tags,
                     date: item.querySelector('.item-date-input').value.trim(),
                     content: item.querySelector('.item-content-input').value.trim(),
-                    sticky: false
+                    sticky: item.dataset.sticky === '1'
                 };
             }).filter(item => item.title || item.url !== '#');
         }
@@ -3873,7 +3819,7 @@
                 dom.gameScreenshotsGrid.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0;grid-column:1/-1;">暂无截图</p>';
             } else {
                 dom.gameScreenshotsGrid.innerHTML = screenshots.map(src => `
-                    <div class="game-screenshot-item" onclick="openImageViewer('${escapeHtml(src)}')">
+                    <div class="game-screenshot-item" data-src="${escapeHtml(src)}" onclick="openImageViewer(this.dataset.src)">
                         <img src="${escapeHtml(src)}" alt="截图" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
                     </div>
                 `).join('');
@@ -4074,7 +4020,7 @@
                 lastRenderedJson = '';
                 renderConfig(cfg);
                 showToast('留言发送成功！', 'success');
-                if (CONFIG.BIN_ID) {
+                if (cloudSynced && CONFIG.BIN_ID) {
                     await saveToCloud(cfg);
                 }
             } else {
@@ -4163,15 +4109,11 @@
             showToast('已进入管理模式', 'info');
         }
 
-        dom.adminFab.addEventListener('click', () => {
-            fillForm(loadLocalConfig());
-            dom.modal.classList.add('active');
-        });
+        dom.adminFab.addEventListener('click', openModal);
 
         dom.footerSettingsBtn.addEventListener('click', () => {
             if (isAdminMode) {
-                fillForm(loadLocalConfig());
-                dom.modal.classList.add('active');
+                openModal();
             } else {
                 checkAdminMode();
             }
@@ -4266,6 +4208,7 @@
             const item = document.createElement('div');
             item.className = 'interest-input-item locked';
             item.dataset.index = list.children.length;
+            item.dataset.sticky = data?.sticky ? '1' : '';
             item.innerHTML = `
                 <div class="setting-interest-img-wrap">
                     <img class="setting-interest-img item-img" src="${data?.cover || FALLBACK_IMG}" data-src="${data?.cover || ''}" alt="封面"
@@ -4493,7 +4436,6 @@
         };
 
         window.deleteInterestItem = function(btn, category) {
-            const list = $(`${category}List`);
             btn.closest('.interest-input-item').remove();
             showToast('已删除', 'info');
         };
@@ -4520,11 +4462,12 @@
                 return;
             }
 
-            const observer = new IntersectionObserver((entries) => {
+            if (scrollObserver) scrollObserver.disconnect();
+            scrollObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
+                        scrollObserver.unobserve(entry.target);
                     }
                 });
             }, {
@@ -4533,7 +4476,7 @@
             });
 
             document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
-                observer.observe(el);
+                scrollObserver.observe(el);
             });
         }
 
@@ -4651,6 +4594,11 @@
                 checkAdminMode();
             }
         });
+
+        // 支持通过 ?admin 直接进入管理登录（修复：原 ?admin 参数被忽略）
+        if (/[?&]admin\b/.test(location.search)) {
+            checkAdminMode();
+        }
 
         init();
     });
