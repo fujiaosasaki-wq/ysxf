@@ -33,123 +33,140 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=Noto+Sans+SC:wght@300;500;700&display=swap">
     <style>
-
   :root{
     --paper:#f3ede1; --paper-2:#ece4d4; --ink:#1a1712; --ink-2:#6b6354; --rule:#1a1712;
     --accent:#b3391f; --accent-2:#2f5d50;
     --serif:"Noto Serif SC",Georgia,"Songti SC",serif;
     --sans:"Noto Sans SC",-apple-system,"PingFang SC",sans-serif;
-    --card:#efe8da;
+  }
+  :root{
+--card:#efe8da
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.65;
     background-image:radial-gradient(rgba(0,0,0,.018) 1px,transparent 1px);background-size:4px 4px}
   .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
   a{color:inherit}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-  /* ===== 刊头 ===== */
-  .masthead{border-bottom:3px double var(--rule);padding:34px 0 18px;margin-bottom:6px}
-  .masthead .meta{display:flex;justify-content:space-between;font-size:11px;letter-spacing:2px;
+  /* 刊头 */
+  .masthead{border-bottom:3px double var(--rule);padding:34px 0 18px;margin-bottom:6px;text-align:center}
+  .masthead .meta{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:11px;letter-spacing:2px;
     text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:14px}
-  .masthead h1{font-family:var(--serif);font-weight:900;font-size:clamp(40px,8vw,86px);line-height:.92;letter-spacing:-.01em}
-  .masthead .sub{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink-2);margin-top:6px}
+  .masthead .meta .author{font-weight:700;color:var(--ink)}
+  .masthead h1{font-family:var(--serif);font-weight:900;font-size:clamp(38px,8vw,84px);line-height:.92;letter-spacing:.06em}
+  .masthead .sub{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink-2);margin-top:8px}
 
-  /* ===== 头版: 主稿 + 侧栏 ===== */
+  /* 头版 */
   .lead{display:grid;grid-template-columns:1.6fr .9fr;gap:34px;padding:30px 0;border-bottom:1px solid var(--rule)}
-  .lead .headline{font-family:var(--serif);font-weight:900;font-size:clamp(30px,4.4vw,52px);line-height:1.04;letter-spacing:-.01em}
-  .lead .cover{width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;margin:18px 0;border:1px solid var(--rule)}
+  .lead .headline{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4.4vw,50px);line-height:1.04;letter-spacing:-.01em;margin-bottom:14px}
+  .lead .cover{width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;border:1px solid var(--rule);margin:0 0 18px}
   .lead .body{column-count:2;column-gap:26px;font-family:var(--serif);font-size:15.5px;text-align:justify}
   .lead .body p{margin-bottom:12px}
   .lead .body p:first-child::first-letter{float:left;font-family:var(--serif);font-weight:900;font-size:64px;line-height:.8;padding:6px 10px 0 0;color:var(--accent)}
   .pull{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.4;border-top:2px solid var(--rule);border-bottom:2px solid var(--rule);
-    padding:14px 0;margin:16px 0;color:var(--accent)}
+    padding:14px 0;margin:16px 0;color:var(--accent);column-span:all}
+
+  /* 侧栏（兴趣 + 标签云） */
   .side .box{border:1px solid var(--rule);padding:16px;margin-bottom:18px}
   .side h3{font-family:var(--serif);font-size:15px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:12px}
   .side .now{display:flex;align-items:center;gap:12px;padding:8px 0}
   .side .now img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--rule)}
   .side .now b{font-size:14px}.side .now span{display:block;font-size:12px;color:var(--ink-2)}
   .side .tag{display:inline-block;font-size:11px;padding:3px 9px;border:1px solid var(--rule);margin:0 5px 6px 0}
-
-  /* ===== 文章索引(报纸格) ===== */
-  .index{border-bottom:1px solid var(--rule);padding:26px 0}
-  .index .h{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-  .art{border-top:2px solid var(--rule);padding-top:12px}
-  .art img{width:100%;aspect-ratio:3/2;object-fit:cover;filter:grayscale(.15)}
-  .art .k{font-size:11px;letter-spacing:1px;color:var(--accent);font-weight:700;text-transform:uppercase}
-  .art h4{font-family:var(--serif);font-size:19px;line-height:1.2;margin:6px 0}
-  .art p{font-size:13.5px;color:var(--ink-2)}
-
-  /* ===== 时间线(说说) ===== */
-  .timeline-sec{padding:26px 0;border-bottom:1px solid var(--rule)}
-  .timeline-sec .h{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
-  .tl{display:grid;grid-template-columns:120px 1fr;gap:16px;border-top:1px solid var(--rule);padding:14px 0}
-  .tl .d{font-family:var(--serif);font-weight:700;color:var(--accent-2)}
-  .tl p{font-family:var(--serif);font-size:16px}
-
-  /* ===== 读者来信(友邻) ===== */
-  .letters{padding:26px 0 50px}
-  .letters .h{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
-  .letter{display:grid;grid-template-columns:54px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--rule)}
-  .letter img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:1px solid var(--rule)}
-  .letter .who{font-weight:700;font-size:14px}
-  .letter .who span{font-weight:400;color:var(--ink-2);font-size:12px;margin-left:8px}
-  .letter p{font-family:var(--serif);font-size:15px;margin-top:3px}
-  .colophon{border-top:3px double var(--rule);padding:18px 0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-2);text-align:center}
-
-  @media (max-width:780px){
-    .lead{grid-template-columns:1fr}.lead .body{column-count:1}
-    .grid{grid-template-columns:1fr}.tl{grid-template-columns:80px 1fr}
-  }
-
-
-  /* ===== JS 动态内容（preview 报刊语言）===== */
-  .post-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-  .post-card{border-top:2px solid var(--rule);padding-top:12px;cursor:pointer;transition:opacity .2s}
-  .post-card:hover{opacity:.82}
-  .post-cover{width:100%;aspect-ratio:3/2;background-size:cover;background-position:center;border:1px solid var(--rule);margin-bottom:10px;position:relative}
-  .post-sticky{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:11px;padding:2px 8px}
-  .post-meta{font-size:11px;color:var(--ink-2);margin-bottom:6px}
-  .post-title{font-family:var(--serif);font-size:19px;line-height:1.2;margin:6px 0}
-  .post-excerpt{font-size:13.5px;color:var(--ink-2)}
-  .post-tags{margin-top:8px}
-  .post-tag{display:inline-block;font-size:11px;padding:2px 8px;border:1px solid var(--rule);margin:0 5px 6px 0}
-
-  .moment-card{border-top:1px solid var(--rule);padding:14px 0;display:grid;grid-template-columns:120px 1fr;gap:16px}
-  .moment-content{font-family:var(--serif);font-size:16px}
-  .moment-time{font-family:var(--serif);font-weight:700;color:var(--accent-2);font-size:14px}
-
-  .friend-message-item{border-top:1px solid var(--rule);padding:14px 0;display:grid;grid-template-columns:54px 1fr;gap:14px}
-  .message-header{font-weight:700;font-size:14px}
-  .message-nickname{color:var(--accent)}
-  .message-content{font-family:var(--serif);font-size:15px;margin-top:3px}
-
   .interest-category{border:1px solid var(--rule);padding:16px;margin-bottom:18px}
-  .interest-category-title{font-family:var(--serif);font-size:15px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:12px}
-  .interest-item-card{display:flex;gap:12px;align-items:center;padding:8px 0;text-decoration:none;color:inherit}
-  .interest-item-img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--rule)}
-  .interest-item-name{font-size:14px}
-  .game-list-item{border-top:1px solid var(--rule);padding:10px 0}
-
+  .interest-category-title{font-family:var(--serif);font-size:15px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .interest-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+  .interest-item-card{flex:0 0 auto;width:88px;text-align:center;text-decoration:none;color:inherit}
+  .interest-item-img-wrap{width:88px;height:88px;border:1px solid var(--rule);overflow:hidden}
+  .interest-item-img{width:100%;height:100%;object-fit:cover}
+  .interest-item-name{font-size:12px;margin-top:6px;font-family:var(--serif)}
+  .game-list-container{display:flex;flex-direction:column;gap:10px}
+  .game-item-card{display:flex;gap:12px;align-items:center;border:1px solid var(--rule);padding:8px;cursor:pointer;text-align:left}
+  .game-list-cover{width:54px;height:54px;flex:0 0 auto}
+  .game-list-cover img{width:100%;height:100%;object-fit:cover;border:1px solid var(--rule)}
+  .game-list-title{font-family:var(--serif);font-size:14px;font-weight:700}
+  .game-list-remark{font-size:12px;color:var(--ink-2)}
   .profile-tag{display:inline-block;font-size:11px;padding:3px 9px;border:1px solid var(--rule);margin:0 5px 6px 0}
 
-  @media (max-width:780px){
-    .post-grid{grid-template-columns:1fr}
-    .moment-card{grid-template-columns:80px 1fr}
-    .music-player{max-width:200px;padding:6px 10px}
-    .back-to-top{width:40px;height:40px;bottom:14px;right:14px}
-    .admin-fab{bottom:80px;right:16px;width:44px;height:44px}
-  }
+  /* 文章索引 */
+  .index{border-bottom:1px solid var(--rule);padding:26px 0}
+  .index .h{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+  .index .h-sub{font-size:13px;color:var(--ink-2);font-style:italic;margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .post-card{border-top:2px solid var(--rule);padding-top:12px;cursor:pointer;animation:fadeUp .5s both}
+  .post-cover{width:100%;aspect-ratio:3/2;background-size:cover;background-position:center;filter:grayscale(.12);border:1px solid var(--rule);margin-bottom:10px;position:relative;min-height:120px}
+  .post-sticky{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:11px;padding:2px 8px;letter-spacing:1px}
+  .post-meta{font-size:11px;color:var(--ink-2);margin-bottom:4px;display:flex;gap:10px}
+  .post-title{font-family:var(--serif);font-size:19px;line-height:1.2;margin:6px 0}
+  .post-excerpt{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+  .post-tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+  .post-tag{font-size:11px;padding:2px 8px;border:1px solid var(--rule);color:var(--accent)}
 
-.admin-fab{position:fixed;left:20px;bottom:20px;width:48px;height:48px;border-radius:50%;border:1px solid var(--rule);background:var(--card);color:var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:80;box-shadow:0 6px 18px rgba(0,0,0,.22);transition:transform .2s ease}
-.admin-fab:hover{transform:scale(1.08)}
-.music-player{position:fixed;right:20px;bottom:20px;display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--rule);background:var(--card);border-radius:999px;z-index:80;max-width:240px}
-.music-player .music-cover{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none}
-.music-player .music-info{display:flex;flex-direction:column;min-width:0}
-.music-player .music-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.music-player .music-artist{font-size:11px;color:var(--ink-2)}
-.music-player .music-btn{margin-left:6px;width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);cursor:pointer;flex:none;font-size:14px}
-.music-player.playing .music-cover{box-shadow:0 0 0 3px var(--accent)}
+  /* 说说时间线 */
+  .timeline-sec{padding:26px 0;border-bottom:1px solid var(--rule)}
+  .timeline-sec .h{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+  .timeline-sec .h-sub{font-size:13px;color:var(--ink-2);font-style:italic;margin-bottom:16px}
+  .moment-card{display:grid;grid-template-columns:120px 1fr;gap:16px;border-top:1px solid var(--rule);padding:14px 0;animation:fadeUp .5s both}
+  .moment-time{font-family:var(--serif);font-weight:700;color:var(--accent-2);font-size:14px}
+  .moment-content{font-family:var(--serif);font-size:16px;line-height:1.5}
+
+  /* 读者来信 */
+  .letters{padding:26px 0 50px}
+  .letters .h{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+  .friend-message-item{border-top:1px solid var(--rule);padding:14px 0;animation:fadeUp .5s both}
+  .message-header{display:flex;align-items:baseline;gap:2px;margin-bottom:4px}
+  .message-nickname{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--accent)}
+  .message-colon{color:var(--ink-2)}
+  .message-content{font-family:var(--serif);font-size:15.5px;line-height:1.6}
+  .message-content.collapsed{max-height:4.8em;overflow:hidden}
+  .message-expand-btn{margin-top:6px;background:none;border:1px solid var(--rule);font-size:12px;padding:2px 10px;cursor:pointer;font-family:var(--sans)}
+  .message-time{font-size:11px;color:var(--ink-2);letter-spacing:1px;margin-top:6px;text-transform:uppercase}
+
+  /* 版权页 */
+  .colophon{border-top:3px double var(--rule);padding:18px 0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-2);text-align:center;display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .footer-settings{font:inherit;letter-spacing:1px;text-transform:uppercase;background:none;border:1px solid var(--rule);color:var(--ink-2);padding:4px 12px;cursor:pointer}
+  .footer-settings:hover{color:var(--ink);background:var(--paper-2)}
+
+  /* 响应式 */
+  @media (max-width:960px){
+    .lead{grid-template-columns:1fr}
+    .lead .body{column-count:1}
+    .grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 16px}
+    .masthead{padding:24px 0 14px}
+    .masthead h1{font-size:clamp(30px,11vw,52px);letter-spacing:.02em}
+    .masthead .meta{gap:10px;font-size:10px}
+    .lead{padding:22px 0}
+    .lead .body p:first-child::first-letter{font-size:46px}
+    .grid{grid-template-columns:1fr}
+    .index,.timeline-sec{padding:22px 0}
+    .index .h,.timeline-sec .h,.letters .h{font-size:19px}
+    .moment-card{grid-template-columns:72px 1fr;gap:12px}
+    .moment-time{font-size:13px}
+    .friend-message-item .message-content{font-size:15px}
+    .interest-item-card,.interest-item-img-wrap{width:74px}
+    .interest-item-img-wrap{height:74px}
+    .game-list-cover{width:46px;height:46px}
+  }
+  @media (max-width:420px){
+    .wrap{padding:0 12px}
+    .masthead .meta{flex-direction:column;gap:2px}
+    .moment-card{grid-template-columns:1fr;gap:2px}
+    .moment-time{margin-bottom:2px}
+    .interest-item-card,.interest-item-img-wrap{width:64px}
+    .interest-item-img-wrap{height:64px}
+  }
+  /* 移动端浮动控件不遮挡内容 */
+  @media (max-width:640px){
+    .music-player{left:12px;right:12px;bottom:12px;width:auto}
+    .back-to-top{bottom:96px;right:12px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+  }
 
 .modal-overlay {
             position: fixed;
@@ -1580,78 +1597,54 @@
 
 
 
-</style><body>
-    <!-- ===== 刊头 ===== -->
-        <!-- ===== 刊头 ===== -->
+
+  </style><body>
+  <button id="themeToggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌓</button>
+  <div class="wrap">
     <header class="masthead">
-      <div class="meta"><span>第 412 期</span><span>佐仓柚子 著</span><span>2026 年 8 月</span></div>
-      <h1 id="navSiteName">柚 子 周 刊</h1>
-      <div class="sub" id="heroSubtitle">A personal dispatch on building, listening &amp; playing — 关于把想法做成能跑的东西</div>
+      <div class="meta">
+        <span>个人站 · 月刊</span>
+        <span class="author" id="mastAuthor">云散星繁 著</span>
+        <span id="mastDate">2026 年 8 月</span>
+      </div>
+      <h1 id="heroTitle">云散星繁的小站</h1>
+      <div class="sub" id="heroSubtitle">记录生活，分享热爱</div>
     </header>
 
-    <!-- ===== 头版 ===== -->
     <article class="lead">
-      <div>
-        <div class="headline" id="heroTitle">不写一行后端，<br>也能拥有可编辑的个人空间</div>
+      <div class="lead-main">
+        <h2 class="headline" id="leadHeadline">头条标题</h2>
         <div class="cover" id="heroBg"></div>
-        <div class="body">
-          <p>很多人以为「能自己改内容的网站」必须配一套后端。其实未必。用一份静态前端，加上一个云数据库，就能把文章、音乐、说说都变成可随时编辑的内容。</p>
-          <p class="pull">「限制往往不在技术，而在我们默认的那套范式。」</p>
-          <p>这次我把整个站点推倒重做了三遍。第一遍换皮，第二遍换骨架，第三遍才真正换了一种和它相处的方式——不再被旧布局牵着走。</p>
-          <p>如果你也在维护个人站，建议先想清楚：你到底要的是「看起来新」，还是「用起来新」。</p>
-        </div>
+        <div class="body" id="leadBody"><p>你好！我是云散星繁。这是我的个人主页，欢迎。</p></div>
       </div>
       <aside class="side">
-        <div class="box">
-          <h3 id="interestsSubtitle">兴趣收藏</h3>
-          <div id="interestsContainer"><!-- 动态生成：音乐 / 动漫 / 游戏 --></div>
-        </div>
-        <div class="box">
-          <h3>标签云</h3>
-          <div id="profileTags"></div>
-        </div>
+        <div id="interestsContainer"></div>
+        <div class="box"><h3>标签云</h3><div id="profileTags"></div></div>
       </aside>
     </article>
 
-    <!-- ===== 文章索引 ===== -->
     <section class="index">
-      <div class="h" id="postsSubtitle">更多文章</div>
-      <div id="postsList" class="post-grid"><!-- 动态生成 --></div>
+      <div class="h">更多文章</div>
+      <div class="h-sub" id="postsSubtitle">分享技术与生活的点滴</div>
+      <div class="grid" id="postsList"></div>
     </section>
 
-    <!-- ===== 说说时间线 ===== -->
     <section class="timeline-sec">
-      <div class="h" id="momentsSubtitle">近期说说</div>
-      <div id="momentsList"><!-- 动态生成 --></div>
+      <div class="h">近期说说</div>
+      <div class="h-sub" id="momentsSubtitle">记录生活中的小片段</div>
+      <div id="momentsList"></div>
     </section>
 
-    <!-- ===== 读者来信 ===== -->
     <section class="letters">
       <div class="h">友邻来信</div>
-      <div id="friendMessagesList" class="letters-list"><!-- 动态生成 --></div>
+      <div id="friendMessagesList"></div>
     </section>
 
     <footer class="colophon" id="footerContent">
-      <span id="footerText">柚子周刊 · 由静态前端与云数据库手工排印</span>
-      <button id="footerSettingsBtn">设置</button>
+      <span id="footerText">© 2026 云散星繁的小站 | Powered by Love ☕</span>
+      <button id="footerSettingsBtn" class="footer-settings" type="button">设置</button>
     </footer>
-
-    <!-- 遗留数据挂载点：预览无对应视觉，隐藏保活，避免渲染中断 -->
-    <div class="legacy-hidden" style="display:none" aria-hidden="true">
-      <nav id="navMenu"></nav>
-      <img id="sidebarAvatar" src="" alt="">
-      <span id="sidebarName"></span>
-      <span id="sidebarTitle"></span>
-      <span id="sidebarBio"></span>
-      <span id="noticeContent"></span>
-      <span class="stat">文章 <b id="infoPosts">0</b></span>
-      <span class="stat">运行 <b id="infoDays">0</b></span>
-      <span class="stat">访问 <b id="infoViews">0</b></span>
-      <span id="tagCloud"></span>
-      <div id="messageInputWrap"></div>
-      <div id="messageInputPlaceholder"></div>
-      <button id="themeToggle">切换主题</button>
-    </div>
+  </div>
 <div class="music-player" id="musicPlayer">
         <img class="music-cover" id="musicCover" src="https://placehold.co/80x80/ffcccc/fff?text=♪" alt="音乐封面" onerror="this.onerror=null;this.src='https://placehold.co/80x80/eee/999?text=♪'">
         <div class="music-info">
@@ -1703,7 +1696,7 @@
                 <button class="tab-btn" data-tab="tab-sidebar">侧边栏</button>
                 <button class="tab-btn" data-tab="tab-interests">兴趣展示</button>
                 <button class="tab-btn" data-tab="tab-friends">好友管理</button>
-                <button class="tab-btn" data-tab="tab-nav">导航菜单</button>
+                <button class="tab-btn" data-tab="tab-nav" style="display:none">导航菜单</button>
             </div>
 
             <!-- 基础设置 -->
@@ -1740,7 +1733,7 @@
 
             <!-- 首页大图 -->
             <div class="tab-panel" id="tab-hero">
-                <div class="setting-group">
+                <div class="setting-group"> style="display:none"
                     <label>网站名称（导航栏）</label>
                     <input type="text" id="inputSiteName" placeholder="显示在导航栏左侧" maxlength="20">
                 </div>
@@ -1791,7 +1784,7 @@
 
             <!-- 侧边栏 -->
             <div class="tab-panel" id="tab-sidebar">
-                <div class="setting-group">
+                <div class="setting-group"> style="display:none"
                     <label>公告内容</label>
                     <textarea id="inputNotice" rows="3" placeholder="显示在侧边栏公告区" maxlength="200"></textarea>
                 </div>
@@ -1801,12 +1794,12 @@
                     <button type="button" class="btn-add" onclick="addTagItem()">+ 添加标签</button>
                     <span class="setting-tip">每个标签包含：标签名（如MBTI、星座）和内容（如INTJ、处女座）。点击锁图标可锁定单项防止误修改。</span>
                 </div>
-                <div class="setting-group">
+                <div class="setting-group"> style="display:none"
                     <label>网站运行开始日期</label>
                     <input type="text" id="inputStartDate" placeholder="2026-01-01">
                     <span class="setting-tip">格式：YYYY-MM-DD，用于计算运行天数</span>
                 </div>
-                <div class="setting-group">
+                <div class="setting-group"> style="display:none"
                     <label>显示访问次数</label>
                     <input type="text" id="inputViews" placeholder="手动填写一个数字，纯展示用">
                 </div>
@@ -1854,7 +1847,7 @@
             </div>
 
             <!-- 导航菜单 -->
-            <div class="tab-panel" id="tab-nav">
+            <div class="tab-panel" id="tab-nav" style="display:none">
                 <div class="setting-group">
                     <label>导航菜单</label>
                     <div id="navList" class="interests-input-list"></div>
@@ -2063,6 +2056,10 @@
             heroBg: $('heroBg'),
             heroTitle: $('heroTitle'),
             heroSubtitle: $('heroSubtitle'),
+            mastAuthor: $('mastAuthor'),
+            mastDate: $('mastDate'),
+            leadHeadline: $('leadHeadline'),
+            leadBody: $('leadBody'),
             sidebarAvatar: $('sidebarAvatar'),
             sidebarName: $('sidebarName'),
             sidebarTitle: $('sidebarTitle'),
@@ -2456,8 +2453,8 @@
             lastRenderedJson = json;
 
             // 导航栏
-            dom.navSiteName.textContent = cfg.siteName || defaultConfig.siteName;
-            if (cfg.nav && cfg.nav.length) {
+            if (dom.navSiteName) dom.navSiteName.textContent = cfg.siteName || defaultConfig.siteName;
+            if (dom.navMenu && cfg.nav && cfg.nav.length) {
                 dom.navMenu.innerHTML = cfg.nav.map(n =>
                     `<li><a href="${escapeHtml(n.url)}"><i class="fas ${escapeHtml(n.icon)}"></i> ${escapeHtml(n.name)}</a></li>`
                 ).join('');
@@ -2469,16 +2466,29 @@
             if (cfg.heroBg) dom.heroBg.style.backgroundImage = `url('${cfg.heroBg}')`;
             document.title = (cfg.heroTitle || cfg.siteName || '我的小站') + ' - ' + (cfg.title || '');
 
+            // 头版(报刊风)：首篇文章作头条，个人简介作导语
+            const leadPost = (cfg.posts && cfg.posts.length) ? cfg.posts[0] : null;
+            const _now = new Date();
+            const _dateLabel = _now.getFullYear() + ' 年 ' + (_now.getMonth() + 1) + ' 月';
+            if (dom.mastAuthor) dom.mastAuthor.textContent = (cfg.name || '') + ' 著';
+            if (dom.mastDate) dom.mastDate.textContent = _dateLabel;
+            if (dom.leadHeadline) dom.leadHeadline.textContent = leadPost ? leadPost.title : (cfg.heroSubtitle || defaultConfig.heroSubtitle);
+            if (dom.leadBody) {
+                let _lb = '<p>' + escapeHtml(cfg.bio || '') + '</p>';
+                if (leadPost && leadPost.excerpt) _lb += '<p class="pull">' + escapeHtml(leadPost.excerpt) + '</p>';
+                dom.leadBody.innerHTML = _lb;
+            }
+
             // 副标题
             if (dom.postsSubtitle) dom.postsSubtitle.textContent = cfg.postsSubtitle || defaultConfig.postsSubtitle;
             if (dom.momentsSubtitle) dom.momentsSubtitle.textContent = cfg.momentsSubtitle || defaultConfig.momentsSubtitle;
             if (dom.interestsSubtitle) dom.interestsSubtitle.textContent = cfg.interestsSubtitle || defaultConfig.interestsSubtitle;
 
             // 侧边栏个人卡片
-            dom.sidebarAvatar.src = cfg.avatar || FALLBACK_AVATAR;
-            dom.sidebarName.textContent = cfg.name || '';
-            dom.sidebarTitle.textContent = cfg.title || '';
-            dom.sidebarBio.textContent = cfg.bio || '';
+            if (dom.sidebarAvatar) dom.sidebarAvatar.src = cfg.avatar || FALLBACK_AVATAR;
+            if (dom.sidebarName) dom.sidebarName.textContent = cfg.name || '';
+            if (dom.sidebarTitle) dom.sidebarTitle.textContent = cfg.title || '';
+            if (dom.sidebarBio) dom.sidebarBio.textContent = cfg.bio || '';
 
             // 统计
             const postsCount = (cfg.posts || []).length;
@@ -2486,20 +2496,21 @@
             dom.profileTags.innerHTML = tags.map(t => 
                 `<span class="profile-tag">${escapeHtml(t)}</span>`
             ).join('');
-            dom.infoPosts.textContent = postsCount;
-            dom.infoDays.textContent = calcDays(cfg.startDate) + ' 天';
-            dom.infoViews.textContent = cfg.views || '0';
+            if (dom.infoPosts) dom.infoPosts.textContent = postsCount;
+            if (dom.infoDays) dom.infoDays.textContent = calcDays(cfg.startDate) + ' 天';
+            if (dom.infoViews) dom.infoViews.textContent = cfg.views || '0';
 
             // 公告
-            dom.noticeContent.textContent = cfg.notice || '';
+            if (dom.noticeContent) dom.noticeContent.textContent = cfg.notice || '';
 
             // 好友留言板
             renderFriendMessages(cfg);
 
             // 文章列表
-            if (cfg.posts && cfg.posts.length) {
-                dom.postsList.innerHTML = cfg.posts.map((p, i) => `
-                    <article class="post-card" style="animation-delay:${0.1 + i * 0.1}s" data-post-index="${i}">
+            const restPosts = (cfg.posts && cfg.posts.length > 1) ? cfg.posts.slice(1) : [];
+            if (restPosts.length) {
+                dom.postsList.innerHTML = restPosts.map((p, i) => `
+                    <article class="post-card" style="animation-delay:${0.1 + i * 0.1}s" data-post-index="${i + 1}">
                         <div style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
                             <div class="post-cover" style="background-image:url('${escapeHtml(p.cover || FALLBACK_IMG)}')">
                                 ${p.sticky ? '<span class="post-sticky"><i class="fas fa-thumbtack"></i> 置顶</span>' : ''}
@@ -2522,7 +2533,7 @@
                     });
                 });
             } else {
-                dom.postsList.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0;">暂无文章</p>';
+                dom.postsList.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0;">暂无更多文章</p>';
             }
 
             // 说说
@@ -3683,5 +3694,6 @@
         init();
     });
     </script>
+
 </body>
 </html>
