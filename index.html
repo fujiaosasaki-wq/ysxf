@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>云散星繁的小站</title>
     <script>
         (function() {
@@ -29,7 +29,11 @@
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=Noto+Sans+SC:wght@300;500;700&display=swap">
     <style>
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
             overflow-x: hidden;
@@ -2451,117 +2455,256 @@
         .game-input-list .interest-item-content {
             width: 100%;
         }
-    </style>
+    
+
+/* ===== 杂志范式（报刊风）重写 · 公开层 ===== */
+/* ============================================================
+   杂志范式（报刊风）— 公开层重写
+   追加在原样式之后；仅定义新类与覆盖 body，弹窗/后台样式沿用原样式
+   ============================================================ */
+:root{
+    --paper:#f3ede1;
+    --paper-2:#ece4d4;
+    --card:#efe8da;
+    --ink:#1a1712;
+    --ink-2:#6b6354;
+    --rule:#1a1712;
+    --accent:#b3391f;
+    --accent-2:#2f5d50;
+    --serif:"Noto Serif SC",Georgia,"Songti SC",serif;
+    --sans:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+body.dark-mode{
+    --paper:#15130e;
+    --paper-2:#1c1a13;
+    --card:#211e16;
+    --ink:#efe9dc;
+    --ink-2:#9a9183;
+    --rule:#efe9dc;
+    --accent:#e0694a;
+    --accent-2:#5fae9b;
+    background:var(--paper);
+    color:var(--ink);
+}
+
+/* 基础覆盖（置于原 body 规则之后生效） */
+body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.65;
+    background-image:radial-gradient(rgba(0,0,0,.02) 1px,transparent 1px);
+    background-size:4px 4px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+/* 入场动画（复用 JS 的 .reveal/.active） */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.active{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none}}
+
+/* ===== 刊头 ===== */
+.masthead{max-width:1080px;margin:0 auto;padding:30px 28px 14px;border-bottom:3px double var(--rule)}
+.masthead-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:12px}
+.masthead-top .theme-toggle{position:static;transform:none;width:30px;height:30px}
+.masthead-brand{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap;align-items:center}
+.masthead-logo{font-family:var(--serif);font-weight:900;font-size:clamp(34px,7vw,76px);line-height:.9;letter-spacing:-.01em}
+.masthead-nav{display:flex;gap:20px;flex-wrap:wrap}
+.masthead-nav li{list-style:none}
+.masthead-nav a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;padding-bottom:3px;border-bottom:2px solid transparent;transition:.2s}
+.masthead-nav a:hover{color:var(--accent);border-color:var(--accent)}
+.masthead-sub{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink-2);margin-top:8px}
+
+/* ===== 头版 ===== */
+.lead{position:relative;max-width:1080px;margin:0 auto;padding:30px 28px 8px;display:grid;grid-template-columns:1.65fr .95fr;gap:36px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.10;filter:grayscale(.3);pointer-events:none;z-index:0}
+.lead-main{position:relative;z-index:1}
+.lead-headline{font-family:var(--serif);font-weight:900;font-size:clamp(30px,4.6vw,56px);line-height:1.04;letter-spacing:-.01em}
+.lead-headline::after{content:"";display:block;width:64px;height:4px;background:var(--accent);margin:16px 0}
+.lead-body{margin-top:8px}
+.lead-bio{font-family:var(--serif);font-size:16px;line-height:1.7;color:var(--ink)}
+.lead-stats{display:flex;gap:26px;margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-2);letter-spacing:.5px}
+.lead-stats .stat b{font-family:var(--serif);font-size:22px;color:var(--ink);margin-left:4px;font-weight:900}
+.lead-side{position:relative;z-index:1;display:flex;flex-direction:column;gap:16px}
+.side-card{border:1px solid var(--rule);padding:16px;background:var(--card)}
+.side-card-title{font-family:var(--serif);font-size:14px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:12px;font-weight:700}
+.profile-card{text-align:center}
+.profile-avatar{width:92px;height:92px;border-radius:50%;object-fit:cover;border:2px solid var(--rule);margin:0 auto 10px;display:block}
+.profile-name{font-family:var(--serif);font-weight:700;font-size:18px}
+.profile-title{font-size:13px;color:var(--ink-2);margin-bottom:10px}
+.profile-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.profile-tag{font-size:11px;padding:3px 10px;border:1px solid var(--rule);border-radius:999px}
+.notice-content{font-size:14px;line-height:1.6;font-family:var(--serif)}
+
+/* ===== 区块通用 ===== */
+.index,.interests,.moments,.letters{max-width:1080px;margin:0 auto;padding:26px 28px;border-top:1px solid var(--rule)}
+.section-label{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+.section-label i{color:var(--accent)}
+.section-sub{font-size:13px;color:var(--ink-2);margin:4px 0 18px}
+
+/* ===== 文章（报纸格）===== */
+.post-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.post-card{border-top:2px solid var(--rule);padding-top:12px;cursor:pointer;transition:transform .25s ease}
+.post-card:hover{transform:translateY(-4px)}
+.post-cover{height:140px;background-size:cover;background-position:center;position:relative;border:1px solid var(--rule)}
+.post-sticky{position:absolute;left:0;bottom:0;background:var(--accent);color:#fff;font-size:11px;padding:3px 9px;font-weight:600}
+.post-body{padding-top:10px}
+.post-meta{font-size:11px;color:var(--ink-2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.post-title{font-family:var(--serif);font-size:19px;line-height:1.2;margin-bottom:6px}
+.post-excerpt{font-size:13.5px;color:var(--ink-2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.post-tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.post-tag{font-size:11px;padding:2px 8px;border:1px solid var(--rule);border-radius:999px;color:var(--ink-2)}
+
+/* ===== 兴趣 ===== */
+.interest-category{margin-bottom:22px}
+.interest-category-title{font-family:var(--serif);font-weight:700;font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.interest-category-title i{color:var(--accent)}
+.interest-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
+.interest-item-card{flex:0 0 auto;width:150px;text-decoration:none;color:inherit;border:1px solid var(--rule);background:var(--card);transition:transform .25s ease}
+.interest-item-card:hover{transform:translateY(-4px)}
+.interest-item-img-wrap{height:150px;overflow:hidden;border-bottom:1px solid var(--rule)}
+.interest-item-img{width:100%;height:100%;object-fit:cover}
+.interest-item-info{padding:9px 10px}
+.interest-item-name{font-size:13px;font-weight:600;font-family:var(--serif)}
+.game-list-container{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.game-item-card,.game-list-item{border:1px solid var(--rule);background:var(--card);display:flex;gap:12px;padding:10px;cursor:pointer;transition:transform .2s ease}
+.game-item-card:hover,.game-list-item:hover{transform:translateY(-3px)}
+.game-list-cover{width:64px;height:64px;flex:none;border:1px solid var(--rule);object-fit:cover}
+.game-list-info{padding:2px 0}
+.game-list-title{font-weight:700;font-size:14px;font-family:var(--serif)}
+.game-list-remark{font-size:12px;color:var(--ink-2);margin-top:3px}
+
+/* ===== 碎碎念 ===== */
+.moment-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 36px}
+.moment-card{border-top:1px solid var(--rule);padding:14px 0}
+.moment-content{font-family:var(--serif);font-size:16px;line-height:1.5}
+.moment-time{font-size:12px;color:var(--ink-2);margin-top:6px;letter-spacing:1px}
+
+/* ===== 读者来信 ===== */
+.letters-list{display:grid;grid-template-columns:repeat(2,1fr);gap:0 36px}
+.friend-message-item{border-top:1px solid var(--rule);padding:14px 0}
+.message-header{font-weight:700;font-size:14px}
+.message-nickname{color:var(--accent)}
+.message-content{font-family:var(--serif);font-size:15px;line-height:1.6;margin-top:4px}
+.message-content.collapsed{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.message-expand-btn{margin-top:6px;background:none;border:0;color:var(--accent-2);font-size:12px;cursor:pointer;padding:0;font-weight:600}
+.message-time{font-size:11px;color:var(--ink-2);margin-top:6px;letter-spacing:1px}
+.message-input-wrap .message-input-placeholder:hover{opacity:.85}
+
+/* ===== 页脚 ===== */
+.footer{border-top:3px double var(--rule);margin-top:20px}
+.footer-content{max-width:1080px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-2)}
+.footer-settings-btn{background:none;border:1px solid var(--rule);color:var(--ink);width:34px;height:34px;border-radius:50%;cursor:pointer;transition:.2s}
+.footer-settings-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ===== 响应式：平板 ===== */
+@media (max-width:980px){
+    .lead{grid-template-columns:1fr;gap:24px}
+    .post-grid{grid-template-columns:repeat(2,1fr)}
+    .moment-grid,.letters-list{grid-template-columns:1fr}
+    .game-list-container{grid-template-columns:1fr}
+}
+/* ===== 响应式：手机 ===== */
+@media (max-width:640px){
+    .wrap,.masthead,.lead,.index,.interests,.moments,.letters,.footer-content{padding-left:18px;padding-right:18px}
+    .masthead-top span:nth-child(2){display:none}
+    .masthead-logo{font-size:40px}
+    .masthead-nav{gap:14px}
+    .post-grid{grid-template-columns:1fr}
+    .lead-stats{gap:18px;flex-wrap:wrap}
+    .interest-scroll{-webkit-overflow-scrolling:touch}
+    .music-player{padding:8px 10px;gap:8px}
+    .music-cover{width:42px;height:42px}
+    .music-title{font-size:12px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .back-to-top{width:40px;height:40px;bottom:14px;right:14px}
+}
+/* ===== 响应式：超小屏 ===== */
+@media (max-width:400px){
+    .masthead-brand{gap:12px}
+    .lead-headline{font-size:30px}
+}
+
+</style>
 </head>
 <body>
-    <!-- 顶部导航 -->
-    <nav class="navbar">
-        <div class="nav-left">
-            <div class="nav-logo">
-                <span id="navSiteName">云散星繁</span>
+    <!-- ===== 刊头 ===== -->
+    <header class="masthead">
+        <div class="masthead-top">
+            <div class="masthead-meta">
+                <span>第 412 期</span>
+                <span>佐仓柚子 著</span>
+                <span>周刊 · 月刊</span>
             </div>
-        </div>
-        <ul class="nav-menu" id="navMenu">
-            <!-- 动态生成 -->
-        </ul>
-        <div class="nav-right">
             <button class="theme-toggle" id="themeToggle" aria-label="切换主题"><i class="fas fa-moon"></i></button>
         </div>
-    </nav>
-
-    <!-- Hero 大图 -->
-    <header class="hero">
-        <div class="hero-bg" id="heroBg" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80');"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title gradient-text" id="heroTitle">云散星繁的小站</h1>
-            <p class="hero-subtitle" id="heroSubtitle">记录生活，分享热爱</p>
+        <div class="masthead-brand">
+            <span class="masthead-logo" id="navSiteName">云散星繁</span>
+            <nav class="masthead-nav" id="navMenu"><!-- 动态生成 --></nav>
         </div>
-        <div class="hero-scroll"><i class="fas fa-chevron-down"></i></div>
-        <div class="hero-skew"></div>
+        <div class="masthead-sub" id="heroSubtitle">记录生活，分享热爱</div>
     </header>
 
-    <!-- 主容器 -->
-    <div class="main-container">
-        <!-- 主内容区 -->
-        <main class="posts-section">
-            <!-- 文章/动态区 -->
-            <div class="reveal">
-                <div class="section-title"><i class="fas fa-newspaper"></i> 最新文章</div>
-                <div class="section-subtitle" id="postsSubtitle">分享技术与生活的点滴</div>
-                <div id="postsList" class="post-list" style="display:flex;flex-direction:column;gap:16px;">
-                    <!-- 动态生成文章卡片 -->
+    <!-- ===== 头版 ===== -->
+    <section class="lead reveal">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="lead-main">
+            <h1 class="lead-headline" id="heroTitle">云散星繁的小站</h1>
+            <div class="lead-body">
+                <p class="lead-bio" id="sidebarBio">正在加载…</p>
+                <div class="lead-stats">
+                    <span class="stat">文章 <b id="infoPosts">0</b></span>
+                    <span class="stat">运行 <b id="infoDays">0 天</b></span>
+                    <span class="stat">访问 <b id="infoViews">0</b></span>
                 </div>
             </div>
-
-            <!-- 说说区 -->
-            <div class="moments-section reveal">
-                <div class="section-title"><i class="fas fa-comment-dots"></i> 碎碎念</div>
-                <div class="section-subtitle" id="momentsSubtitle">记录生活中的小片段</div>
-                <div id="momentsList" class="moment-list">
-                    <!-- 动态生成说说 -->
-                </div>
-            </div>
-
-            <!-- 兴趣展示区 -->
-            <div class="interests-section reveal">
-                <div class="section-title"><i class="fas fa-heart"></i> 兴趣爱好</div>
-                <div class="section-subtitle" id="interestsSubtitle">生活不止眼前的代码</div>
-                <div id="interestsContainer">
-                    <!-- 动态生成兴趣模块 -->
-                </div>
-            </div>
-
-        </main>
-
-        <!-- 侧边栏 -->
-        <aside class="sidebar">
-            <!-- 个人卡片 -->
-            <div class="sidebar-card profile-card reveal-right">
+        </div>
+        <aside class="lead-side">
+            <div class="side-card profile-card">
                 <img id="sidebarAvatar" class="profile-avatar" src="https://placehold.co/120x120/eee/999?text=Avatar" alt="头像" onerror="this.onerror=null;this.src='https://placehold.co/120x120/eee/999?text=Error'">
                 <div class="profile-name" id="sidebarName">正在加载</div>
                 <div class="profile-title" id="sidebarTitle">等待云端响应</div>
-                <div class="profile-bio" id="sidebarBio">...</div>
-                <div class="profile-tags" id="profileTags">
-                    <!-- 动态生成自定义标签 -->
-                </div>
-
-            <!-- 公告 -->
-            <div class="sidebar-card notice-card reveal-right" style="transition-delay: 0.1s;">
-                <div class="sidebar-card-title"><i class="fas fa-bullhorn"></i> 公告</div>
+                <div class="profile-tags" id="profileTags"><!-- 动态生成 --></div>
+            </div>
+            <div class="side-card notice-card">
+                <div class="side-card-title"><i class="fas fa-bullhorn"></i> 公告</div>
                 <div class="notice-content" id="noticeContent">欢迎来到我的小站~</div>
             </div>
-
-            <!-- 好友留言板 -->
-            <div class="sidebar-card reveal-right" style="transition-delay: 0.2s;">
-                <div class="sidebar-card-title" style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-comments" style="color:var(--accent);"></i> 好友留言板
-                </div>
-                <div id="friendMessagesList" class="friend-messages-list">
-                    <!-- 动态生成留言 -->
-                </div>
-                <div class="message-input-wrap" id="messageInputWrap" style="margin-top:12px;">
-                    <div class="message-input-placeholder" id="messageInputPlaceholder" style="padding:10px 14px;border-radius:20px;background:var(--bg-body);color:var(--text-muted);font-size:13px;cursor:pointer;">
-                        <i class="fas fa-lock" style="margin-right:6px;"></i>好友验证后可发言
-                    </div>
-                </div>
-            </div>
-
-            <!-- 网站资讯 -->
-            <div class="sidebar-card reveal-right" style="transition-delay: 0.3s;">
-                <div class="sidebar-card-title" style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-chart-line" style="color:var(--accent);"></i> 网站资讯
-                </div>
-                <div class="site-info">
-                    <div class="site-info-item"><span>文章数目</span><span id="infoPosts">0</span></div>
-                    <div class="site-info-item"><span>运行时间</span><span id="infoDays">0 天</span></div>
-                    <div class="site-info-item"><span>访问次数</span><span id="infoViews">0</span></div>
-                </div>
-            </div>
         </aside>
-    </div>
+    </section>
 
-    <!-- 底部 -->
+    <!-- ===== 文章索引 ===== -->
+    <section class="index reveal">
+        <div class="section-label"><i class="fas fa-newspaper"></i> 最新文章</div>
+        <div class="section-sub" id="postsSubtitle">分享技术与生活的点滴</div>
+        <div id="postsList" class="post-grid"><!-- 动态生成 --></div>
+    </section>
+
+    <!-- ===== 兴趣爱好 ===== -->
+    <section class="interests reveal">
+        <div class="section-label"><i class="fas fa-heart"></i> 兴趣爱好</div>
+        <div class="section-sub" id="interestsSubtitle">生活不止眼前的代码</div>
+        <div id="interestsContainer"><!-- 动态生成 --></div>
+    </section>
+
+    <!-- ===== 碎碎念 ===== -->
+    <section class="moments reveal">
+        <div class="section-label"><i class="fas fa-comment-dots"></i> 碎碎念</div>
+        <div class="section-sub" id="momentsSubtitle">记录生活中的小片段</div>
+        <div id="momentsList" class="moment-grid"><!-- 动态生成 --></div>
+    </section>
+
+    <!-- ===== 读者来信 ===== -->
+    <section class="letters reveal">
+        <div class="section-label"><i class="fas fa-comments"></i> 好友留言板</div>
+        <div id="friendMessagesList" class="letters-list"><!-- 动态生成 --></div>
+        <div class="message-input-wrap" id="messageInputWrap" style="margin-top:14px;">
+            <div class="message-input-placeholder" id="messageInputPlaceholder" style="padding:11px 16px;border-radius:22px;background:var(--card);color:var(--ink-2);font-size:13px;cursor:pointer;">
+                <i class="fas fa-lock" style="margin-right:6px;"></i>好友验证后可发言
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 页脚 ===== -->
     <footer class="footer" id="footerContent">
         <div class="footer-content">
             <span id="footerText">© 2026 云散星繁的小站 | Powered by Love ☕</span>
@@ -2571,7 +2714,7 @@
         </div>
     </footer>
 
-    <!-- 音乐播放器 -->
+    <!-- ===== 音乐播放器（浮动，原行为保留）===== -->
     <div class="music-player" id="musicPlayer">
         <img class="music-cover" id="musicCover" src="https://placehold.co/80x80/ffcccc/fff?text=♪" alt="音乐封面" onerror="this.onerror=null;this.src='https://placehold.co/80x80/eee/999?text=♪'">
         <div class="music-info">
@@ -2581,13 +2724,12 @@
         <button class="music-btn" id="musicPlayBtn" onclick="toggleMusic()"><i class="fas fa-play"></i></button>
     </div>
 
-    <!-- 回到顶部 -->
+    <!-- ===== 回到顶部 ===== -->
     <button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- 管理入口 -->
-    <button class="admin-fab" id="adminFab" title="进入管理模式" aria-label="管理模式">
+<button class="admin-fab" id="adminFab" title="进入管理模式" aria-label="管理模式">
         <i class="fas fa-cog"></i>
     </button>
 
