@@ -1622,6 +1622,15 @@
     .letter{grid-template-columns:44px 1fr;gap:12px}
     .letter img{width:44px;height:44px}
   }
+
+  /* ===== 恢复 admin-fab 浮动样式（默认隐藏，管理员模式才显示） ===== */
+  .admin-fab{position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;
+    background:var(--paper);color:var(--ink);border:1px solid var(--rule);cursor:pointer;z-index:1500;
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+    opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .3s,transform .3s;
+    box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  .admin-fab.show{opacity:1;transform:translateY(0);pointer-events:auto}
+  .admin-fab:hover{background:var(--paper-2);color:var(--accent);border-color:var(--accent)}
 </style><body>
   <button id="themeToggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌓</button>
   <div class="wrap">
@@ -1664,17 +1673,8 @@
 
     <footer class="colophon" id="footerContent">
       <span id="footerText">© 2026 云散星繁的小站 | Powered by Love ☕</span>
-      <button id="footerSettingsBtn" class="footer-settings" type="button">设置</button>
     </footer>
   </div>
-<div class="music-player" id="musicPlayer">
-        <img class="music-cover" id="musicCover" src="https://placehold.co/80x80/ffcccc/fff?text=♪" alt="音乐封面" onerror="this.onerror=null;this.src='https://placehold.co/80x80/eee/999?text=♪'">
-        <div class="music-info">
-            <div class="music-title" id="musicTitle">暂无音乐</div>
-            <div class="music-artist" id="musicArtist">—</div>
-        </div>
-        <button class="music-btn" id="musicPlayBtn" onclick="toggleMusic()"><i class="fas fa-play"></i></button>
-    </div>
 
     <!-- ===== 回到顶部 ===== -->
     <button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">
@@ -3189,15 +3189,7 @@
             showToast('已进入管理模式', 'info');
         }
 
-        dom.adminFab.addEventListener('click', openModal);
-
-        dom.footerSettingsBtn.addEventListener('click', () => {
-            if (isAdminMode) {
-                openModal();
-            } else {
-                checkAdminMode();
-            }
-        });
+        dom.adminFab.addEventListener('click', () => { if (isAdminMode) openModal(); });
 
         async function doAdminLogin() {
             const pwd = dom.adminPasswordInput.value;
@@ -3231,14 +3223,6 @@
             pendingAdminLogin = true;
             setTimeout(() => dom.adminPasswordInput.focus(), 300);
         }
-
-        // ============ 音乐播放器（预留） ============
-        window.toggleMusic = function() {
-            musicPlaying = !musicPlaying;
-            dom.musicPlayer.classList.toggle('playing', musicPlaying);
-            dom.musicPlayBtn.innerHTML = musicPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-            showToast(musicPlaying ? '播放中（示例，暂无实际音乐）' : '已暂停', 'info');
-        };
 
         // ============ 保存按钮 ============
         dom.saveBtn.addEventListener('click', handleSave);
