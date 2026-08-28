@@ -1598,7 +1598,31 @@
 
 
 
-  </style><body>
+  
+  /* ===== 预览保真层：中和旧站残留装饰 / 补预览细节 ===== */
+  .letter p.collapsed{max-height:4.8em;overflow:hidden}
+  .letter .who span{margin-left:8px}
+  .message-expand-btn{margin-top:6px;background:none;border:1px solid var(--rule);color:var(--ink-2);
+    font-family:var(--sans);font-size:12px;padding:2px 10px;cursor:pointer}
+  .message-expand-btn:hover{color:var(--ink);background:var(--paper-2)}
+  .side .now{text-decoration:none;color:inherit}
+  .side .now b{font-weight:700;display:block}
+  .side .now span{display:block;font-size:12px;color:var(--ink-2)}
+  .art{cursor:pointer}
+  .art .k{margin-top:8px}
+  .reveal,.reveal-left,.reveal-right,.reveal-scale{opacity:1!important;transform:none!important}
+  .theme-toggle{display:none!important}
+  @media (max-width:780px){
+    .tl{grid-template-columns:80px 1fr}
+    .art img{aspect-ratio:3/2}
+  }
+  @media (max-width:640px){
+    .tl{grid-template-columns:72px 1fr;gap:12px}
+    .tl .d{font-size:13px}
+    .letter{grid-template-columns:44px 1fr;gap:12px}
+    .letter img{width:44px;height:44px}
+  }
+</style><body>
   <button id="themeToggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌓</button>
   <div class="wrap">
     <header class="masthead">
@@ -1625,13 +1649,11 @@
 
     <section class="index">
       <div class="h">更多文章</div>
-      <div class="h-sub" id="postsSubtitle">分享技术与生活的点滴</div>
       <div class="grid" id="postsList"></div>
     </section>
 
     <section class="timeline-sec">
       <div class="h">近期说说</div>
-      <div class="h-sub" id="momentsSubtitle">记录生活中的小片段</div>
       <div id="momentsList"></div>
     </section>
 
@@ -2494,7 +2516,7 @@
             const postsCount = (cfg.posts || []).length;
             const tags = cfg.tags || [];
             dom.profileTags.innerHTML = tags.map(t => 
-                `<span class="profile-tag">${escapeHtml(t)}</span>`
+                `<span class="tag">${escapeHtml(t)}</span>`
             ).join('');
             if (dom.infoPosts) dom.infoPosts.textContent = postsCount;
             if (dom.infoDays) dom.infoDays.textContent = calcDays(cfg.startDate) + ' 天';
@@ -2509,24 +2531,18 @@
             // 文章列表
             const restPosts = (cfg.posts && cfg.posts.length > 1) ? cfg.posts.slice(1) : [];
             if (restPosts.length) {
-                dom.postsList.innerHTML = restPosts.map((p, i) => `
-                    <article class="post-card" style="animation-delay:${0.1 + i * 0.1}s" data-post-index="${i + 1}">
-                        <div style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
-                            <div class="post-cover" style="background-image:url('${escapeHtml(p.cover || FALLBACK_IMG)}')">
-                                ${p.sticky ? '<span class="post-sticky"><i class="fas fa-thumbtack"></i> 置顶</span>' : ''}
-                            </div>
-                            <div class="post-body">
-                                <div class="post-meta">
-                                ${p.date ? `<span><i class="far fa-calendar"></i> ${escapeHtml(p.date)}</span>` : ''}
-                            </div>
-                                <h3 class="post-title">${escapeHtml(p.title)}</h3>
-                                <p class="post-excerpt">${escapeHtml(p.excerpt || '')}</p>
-                                ${p.tags && p.tags.length ? `<div class="post-tags">${p.tags.slice(0,3).map(t=>`<span class="post-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-                            </div>
-                        </div>
+                dom.postsList.innerHTML = restPosts.map((p, i) => {
+                    const _k = [p.sticky ? '置顶' : '', (p.tags && p.tags[0]) || '', p.date || ''].filter(Boolean).join(' · ');
+                    return `
+                    <article class="art" data-post-index="${i + 1}" style="cursor:pointer">
+                        <img src="${escapeHtml(p.cover || FALLBACK_IMG)}" alt="${escapeHtml(p.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+                        ${_k ? `<div class="k">${escapeHtml(_k)}</div>` : ''}
+                        <h4>${escapeHtml(p.title)}</h4>
+                        <p>${escapeHtml(p.excerpt || '')}</p>
                     </article>
-                `).join('');
-                dom.postsList.querySelectorAll('.post-card').forEach(card => {
+                `;
+                }).join('');
+                dom.postsList.querySelectorAll('.art').forEach(card => {
                     card.addEventListener('click', () => {
                         const idx = parseInt(card.dataset.postIndex);
                         openPostDetail(cfg.posts[idx]);
@@ -2539,9 +2555,9 @@
             // 说说
             if (cfg.moments && cfg.moments.length) {
                 dom.momentsList.innerHTML = cfg.moments.map((m, i) => `
-                    <div class="moment-card" style="animation-delay:${0.1 + i * 0.1}s">
-                        <div class="moment-content">${escapeHtml(m.content).replace(/\n/g,'<br>')}</div>
-                        <div class="moment-time"><i class="far fa-clock"></i> ${escapeHtml(m.date || '')}</div>
+                    <div class="tl">
+                        <div class="d">${escapeHtml(m.date || '')}</div>
+                        <p>${escapeHtml(m.content).replace(/\n/g,'<br>')}</p>
                     </div>
                 `).join('');
             } else {
@@ -2556,49 +2572,23 @@
                     { key: 'game',  name: '喜欢的游戏', icon: 'fa-gamepad' }
                 ];
                 let html = '';
-                categories.forEach(cat => {
-                    const items = cfg.interests[cat.key];
-                    if (items && items.length) {
-                        const isGame = cat.key === 'game';
-                        html += `
-                            <div class="interest-category">
-                                <div class="interest-category-title">
-                                    <i class="fas ${cat.icon}"></i> ${cat.name}
-                                </div>
-                                ${isGame ? `
-                                    <div class="game-list-container" data-cat="${cat.key}">
-                                        ${items.map((item, idx) => `
-                                            <div class="game-list-item game-item-card" style="cursor:pointer;" data-game-index="${idx}">
-                                                <div class="game-list-cover">
-                                                    <img src="${escapeHtml(item.image || FALLBACK_IMG)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
-                                                </div>
-                                                <div class="game-list-info">
-                                                    <div class="game-list-title">${escapeHtml(item.title)}</div>
-                                                    <div class="game-list-remark">${escapeHtml(item.remark || '')}</div>
-                                                </div>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                ` : `
-                                    <div class="interest-scroll" data-cat="${cat.key}">
-                                        ${items.map((item, idx) => `
-                                            <a href="${escapeHtml(item.url || '#')}" class="interest-item-card" target="_blank">
-                                                <div class="interest-item-img-wrap">
-                                                    <img class="interest-item-img" src="${escapeHtml(item.image || FALLBACK_IMG)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
-                                                </div>
-                                                <div class="interest-item-info">
-                                                    <div class="interest-item-name">${escapeHtml(item.title)}</div>
-                                                </div>
-                                            </a>
-                                        `).join('')}
-                                    </div>
-                                `}
-                            </div>
-                        `;
-                    }
+                const BOXNAME = { music: '正在听', anime: '在追', game: '在玩' };
+                ['music', 'anime', 'game'].forEach(key => {
+                    const items = cfg.interests[key];
+                    if (!items || !items.length) return;
+                    const isGame = key === 'game';
+                    html += '<div class="box"><h3>' + BOXNAME[key] + '</h3>' + items.map((item, idx) => {
+                        const _img = escapeHtml(item.image || FALLBACK_IMG);
+                        const _t = escapeHtml(item.title || '');
+                        const _r = escapeHtml(item.remark || '');
+                        const inner = `<img src="${_img}" alt="${_t}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'"><div><b>${_t}</b><span>${_r}</span></div>`;
+                        if (isGame) return `<div class="now" data-game-index="${idx}" style="cursor:pointer">${inner}</div>`;
+                        const _u = item.url ? ` href="${escapeHtml(item.url)}" target="_blank" rel="noopener"` : '';
+                        return `<a class="now"${_u} style="text-decoration:none;color:inherit">${inner}</a>`;
+                    }).join('') + '</div>';
                 });
                 dom.interestsContainer.innerHTML = html;
-                dom.interestsContainer.querySelectorAll('.game-item-card').forEach(card => {
+                dom.interestsContainer.querySelectorAll('[data-game-index]').forEach(card => {
                     card.addEventListener('click', () => {
                         const idx = parseInt(card.dataset.gameIndex);
                         openGameScreenshots(cfg.interests.game[idx]);
@@ -2979,20 +2969,19 @@
             } else {
                 dom.friendMessagesList.innerHTML = messages.map((m, idx) => {
                     const isLong = m.content && m.content.length > 60;
+                    const _nm = escapeHtml(m.nickname || '匿名');
+                    const _svg = '<svg xmlns="http://www.w3.org/2000/svg" width="108" height="108"><rect width="108" height="108" fill="#ece4d4"/><circle cx="54" cy="54" r="53" fill="none" stroke="#1a1712" stroke-width="2"/><text x="54" y="56" font-size="46" font-family="Georgia,serif" fill="#b3391f" text-anchor="middle" dominant-baseline="central">' + _nm.charAt(0) + '</text></svg>';
+                    const _av = 'data:image/svg+xml;utf8,' + encodeURIComponent(_svg);
                     return `
-                        <div class="friend-message-item" data-msg-index="${idx}">
-                            <div class="message-header">
-                                <span class="message-nickname">${escapeHtml(m.nickname || '匿名')}</span>
-                                <span class="message-colon">：</span>
+                        <div class="letter" data-msg-index="${idx}">
+                            <img src="${_av}" alt="">
+                            <div>
+                                <div class="who">${_nm}<span>${escapeHtml(m.time || '')}</span></div>
+                                <p class="${isLong ? 'collapsed' : ''}" data-msg-content="${idx}">${escapeHtml(m.content || '').replace(/\n/g, '<br>')}</p>
+                                ${isLong ? `<button class="message-expand-btn" onclick="toggleMessageExpand(${idx})">展开</button>` : ''}
                             </div>
-                            <div class="message-content ${isLong ? 'collapsed' : ''}" data-msg-content="${idx}">
-                                ${escapeHtml(m.content || '').replace(/\n/g, '<br>')}
-                            </div>
-                            ${isLong ? `<button class="message-expand-btn" onclick="toggleMessageExpand(${idx})">展开</button>` : ''}
-                            ${m.time ? `<div class="message-time">${escapeHtml(m.time)}</div>` : ''}
                         </div>
-                    `;
-                }).join('');
+                    `;}).join('');
             }
             updateMessageInputUI();
         }
